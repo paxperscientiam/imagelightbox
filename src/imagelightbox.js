@@ -82,7 +82,7 @@
             button:         false,
             caption:        false,
             enableKeyboard: true,
-            history:        true,
+            history:        false,
             navigation:     false,
             overlay:        false,
             preloadNext:    true,

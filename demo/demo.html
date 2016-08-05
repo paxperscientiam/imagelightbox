@@ -100,6 +100,15 @@
                data-imagelightbox="i"><img src="images/3.jpg" alt="Snowy road Klaipeda-Vilnius"></a></li>
     </ul>
     <button id="addimage">Add another image</button>
+    <h2>With history</h2>
+    <ul>
+        <li><a href="http://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/full/1.jpg"
+               data-imagelightbox="j"><img src="images/1.jpg" alt="Klaipeda in the night"></a></li>
+        <li><a href="http://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/full/2.jpg"
+               data-imagelightbox="j"><img src="images/2.jpg" alt="Frozen river Dane"></a></li>
+        <li><a href="http://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/full/3.jpg"
+               data-imagelightbox="j"><img src="images/3.jpg" alt="Snowy road Klaipeda-Vilnius"></a></li>
+    </ul>
     <footer>
         <p>Original work by <a href="http://osvaldas.info/image-lightbox-responsive-touch-friendly">Osvaldas Valutis</a></p>
         <p>Photos taken by Osvaldas Valutis using iPhone 4S and lovely Instagram. Just in case.</p>
@@ -181,6 +190,10 @@
 
         // dynamically adding
         instanceI.addToImageLightbox( $("a[data-imagelightbox='add']") );
+    });
+
+    $('a[data-imagelightbox="j"]').imageLightbox({
+        history: true
     });
 </script>
 </body>
