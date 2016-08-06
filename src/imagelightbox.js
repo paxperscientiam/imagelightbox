@@ -1,6 +1,6 @@
 /*
- By Osvaldas Valutis, www.osvaldas.info
- Available for use under the MIT License
+ * By Osvaldas Valutis, www.osvaldas.info
+ * Available for use under the MIT License
  */
 ;(function ($, window, document, undefined) {
     'use strict';
@@ -17,7 +17,6 @@
         },
         'spacer':' | '
     };
-
 
     var cssTransitionSupport = function () {
         var s = document.body || document.documentElement;
@@ -292,12 +291,12 @@
             useHistory = !!(window.history.pushState !== undefined && options.history),
 
             /* TODO make it work again
-             isTargetValid = function (element) {
-             var classic = $(element).prop('tagName').toLowerCase() === 'a' && ( new RegExp('.(' + options.allowedTypes + ')$', 'i') ).test($(element).attr('href'));
-             var html5 = $(element).attr('data-lightbox') !== undefined;
-             return classic || html5;
-             },
-             */
+            isTargetValid = function (element) {
+                var classic = $(element).prop('tagName').toLowerCase() === 'a' && ( new RegExp('.(' + options.allowedTypes + ')$', 'i') ).test($(element).attr('href'));
+                var html5 = $(element).attr('data-lightbox') !== undefined;
+                return classic || html5;
+            },
+            */
 
             setImage = function () {
                 if (!image.length) {
@@ -494,6 +493,7 @@
                 image.remove();
                 image = $();
             },
+
             startImageLightbox = function () {
                 console.log(target);
                 var targetIndex = targets.index(target);
@@ -501,6 +501,7 @@
                     window.history.pushState({index:targetIndex},'',stateHistory.pushSpace.name+(targetIndex+1));
                 }
             },
+
             openLightbox = function ($target) {
                 if (inProgress) {
                     return false;
@@ -530,6 +531,7 @@
                 });
                 $(window,document).off('.imagelightbox');
             },
+
             addTargets = function( newTargets ) {
                 console.log("adding targets");
                 newTargets.each(function () {
@@ -540,13 +542,13 @@
                     e.preventDefault();
                     openLightbox($(this));
                 });
-            };
+            },
 
-        this.startImageLightbox = function () {
-            if (this.length > 0) {
-                openLightbox($(this[0]));
-            }
-        };
+            startImageLightbox = function () {
+                if (this.length > 0) {
+                    openLightbox($(this[0]));
+                }
+            };
 
         $(window)
             .on('resize.imagelightBox', setImage)
@@ -600,6 +602,7 @@
                 e.preventDefault();
                 startImageLightbox();
             });
+
         addTargets($(this));
 
         this.loadPreviousImage = function () {
@@ -614,6 +617,7 @@
             quitImageLightbox();
             return this;
         };
+
         this.startImageLightbox = function () {
             startImageLightbox();
         };
