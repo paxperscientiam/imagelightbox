@@ -151,7 +151,7 @@
             },
             previousTargetDefault: function () {
                 var targetIndex = targets.index(target) - 1;
-                if (history) {
+                if (useHistory) {
                     console.log("current index is "+targetIndex);
                     window.history.pushState({index:targetIndex},'',stateHistory.pushSpace.name+(targetIndex+1));
                 }
@@ -173,7 +173,7 @@
             },
             nextTargetDefault: function () {
                 var targetIndex = targets.index(target) + 1;
-                if (history) {
+                if (useHistory) {
                     console.log("current index is "+targetIndex);
                     window.history.pushState({index:targetIndex},'',stateHistory.pushSpace.name+(targetIndex+1));
                 }
@@ -237,7 +237,7 @@
                         if (images.eq($this.index()).attr('href') !== $('#imagelightbox').attr('src')) {
                             var tmpTarget = targets.eq($this.index());
                             var tmpIndex = $this.index() + 1;
-                            if (history) {
+                            if (useHistory) {
                                 console.log("navigation index is "+tmpIndex);
                                 window.history.pushState({index:$this.index()},'',stateHistory.pushSpace.name+tmpIndex);
                             }
@@ -289,8 +289,7 @@
             imageHeight = 0,
             swipeDiff = 0,
             inProgress = false,
-            history = window.history.pushState !== undefined &&
-                options.history ? true:false,
+            useHistory = !!(window.history.pushState !== undefined && options.history),
 
             /* TODO make it work again
              isTargetValid = function (element) {
@@ -361,7 +360,7 @@
                     //console.log(historyIndex);
                     var imgPath = target.attr('href');
                     var imgName = imgPath.split('/').pop();
-                    if (history) {
+                    if (useHistory) {
 
                         document.title = stateHistory.home.title+
                             stateHistory.spacer+
@@ -498,7 +497,7 @@
             startImageLightbox = function () {
                 console.log(target);
                 var targetIndex = targets.index(target);
-                if (history) {
+                if (useHistory) {
                     window.history.pushState({index:targetIndex},'',stateHistory.pushSpace.name+(targetIndex+1));
                 }
             },
@@ -515,9 +514,8 @@
             },
 
             quitImageLightbox = function () {
-                if (history) {
-                    window.history.pushState('','',
-                                             stateHistory.home.href);
+                if (useHistory) {
+                    window.history.pushState('','', stateHistory.home.href);
                     document.title = stateHistory.home.title;
                 }
                 if (!image.length) {
