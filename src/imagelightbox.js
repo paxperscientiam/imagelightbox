@@ -590,18 +590,15 @@
                     }
                 });
             }
+
+            // Initial State Object
+            window.history.replaceState(null, null, stateHistory.home.href);
         });
 
         $(document).off('click.imagelightbox', this.selector)
             .on('click.imagelightbox', this.selector, function (e) {
                 e.preventDefault();
                 startImageLightbox();
-            })
-            .ready (function () {
-
-                // Initial State Object
-                window.history.replaceState(
-                    null, null, stateHistory.home.href);
             });
         addTargets($(this));
 
