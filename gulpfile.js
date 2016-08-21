@@ -11,13 +11,13 @@ var gulp            = require('gulp'),
 gulp.task('csslint', function () {
     return gulp.src('src/imagelightbox.css')
         .pipe(csslint('.csslintrc'))
-        .pipe(csslint.reporter())
+        .pipe(csslint.formatter())
 });
 
 gulp.task('minify:css', function () {
     return gulp.src('src/imagelightbox.css')
         .pipe(autoprefixer({
-            browsers: ['last 2 versions', 'ie >= 7', 'Firefox ESR', 'Android >= 2.3'],
+            browsers: ['last 2 versions', 'ie >= 9', 'Firefox ESR', 'Android >= 2.3'],
             cascade: false
         }))
         .pipe(cleanCSS())
