@@ -95,6 +95,7 @@
             button:         false,
             caption:        false,
             enableKeyboard: true,
+            lockBody:       true,
             navigation:     false,
             overlay:        false,
             preloadNext:    true,
@@ -121,6 +122,9 @@
                 }
                 if (options.button) {
                     closeButtonOn();
+                }
+                if (options.lockBody) {
+                    lockBody(true);
                 }
             },
             _onEnd = function () {
@@ -189,6 +193,13 @@
             },
             activityIndicatorOff = function () {
                 $('#imagelightbox-loading').remove();
+            },
+            lockBody = function (toggle) {
+                if (toggle) {
+                    $("body").css("overflow","hidden");
+                } else {
+                    $("body").css("overflow","scroll");
+                }
             },
             overlayOn = function () {
                 $wrapper.append($overlayObject);
