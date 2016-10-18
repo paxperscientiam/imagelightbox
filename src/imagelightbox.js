@@ -21,6 +21,9 @@
         $buttonObject =  $('<a/>', {
             id: 'imagelightbox-close'
         }),
+        $buttonAuxObject = $('<a/>', {
+            id: 'imagelightbox-aux'
+        }),
         $overlayObject = $('<div/>', {
             id:'imagelightbox-overlay'
         }),
@@ -93,6 +96,7 @@
                 activity:       false,
                 arrows:         false,
                 button:         false,
+                buttonAux:      false,
                 caption:        false,
                 enableKeyboard: true,
                 lockBody:       false,
@@ -115,6 +119,9 @@
                     }
                     if (options.button) {
                         closeButtonOn();
+                    }
+                    if (options.buttonAux) {
+                        auxButtonOn();
                     }
                     if (options.lockBody) {
                         lockBody(true);
@@ -202,6 +209,11 @@
                 $buttonObject.appendTo($wrapper).on('click.ilb7', function () {
                     _quitImageLightbox();
                     return false;
+                });
+            },
+            auxButtonOn = function () {
+                $buttonAuxObject.appendTo($wrapper).on('click',function (e) {
+                    $(e.target).trigger("aux.imagelightbox");
                 });
             },
             captionOn = function () {
