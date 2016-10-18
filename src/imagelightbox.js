@@ -160,6 +160,7 @@
                     return this.previousTargetDefault();
                 },
                 previousTargetDefault: function () {
+                 $wrapper.trigger("previous.ilb7");
                     var targetIndex = targets.index(target) - 1;
                     if (targetIndex < 0) {
                         if (options.quitOnEnd === true) {
@@ -176,6 +177,7 @@
                     return this.nextTargetDefault();
                 },
                 nextTargetDefault: function () {
+                    $wrapper.trigger("next.ilb7");
                     var targetIndex = targets.index(target) + 1;
                     if (targetIndex >= targets.length) {
                         if (options.quitOnEnd === true) {
@@ -230,7 +232,7 @@
             captionOff = function () {
                 $captionObject.html("&nbsp;");
             },
-            navigationOn = function (instance, selector) {
+            navigationOn = function () {
                 var images = targets;
                 if (images.length) {
                     for (var i = 0; i < images.length; i++) {
@@ -259,7 +261,7 @@
                     });
                 }
             },
-            navigationUpdate = function (selector) {
+            navigationUpdate = function () {
                 var items = $navObject.find('a');
                 items.removeClass('active');
                 items.eq(targets.index(target)).addClass('active');
@@ -485,11 +487,13 @@
                     options.onStart();
                 }
                 $('body').append($wrapper);
+                $wrapper.trigger("start.ilb7");
                 target = $target;
                 _loadImage();
             },
 
             _quitImageLightbox = function () {
+                $wrapper.trigger("quit.ilb7");
                 if (!image.length) {
                     return false;
                 }
@@ -525,7 +529,6 @@
                 _openImageLightbox($(this[0]));
             }
         };
-
 
         $(window).on('resize.ilb7', _setImage);
 
