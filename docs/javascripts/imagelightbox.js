@@ -16,10 +16,14 @@
             class: 'imagelightbox-arrow imagelightbox-arrow-right'}),
         $arrows = $arrowLeftObject.add($arrowRightObject),
         $captionObject = $('<div/>', {
-            id: 'imagelightbox-caption'
+            id: 'imagelightbox-caption',
+            html: "&nbsp;"
         }),
         $buttonObject =  $('<a/>', {
             id: 'imagelightbox-close'
+        }),
+        $buttonAuxObject = $('<a/>', {
+            id: 'imagelightbox-aux'
         }),
         $overlayObject = $('<div/>', {
             id:'imagelightbox-overlay'
@@ -93,6 +97,7 @@
                 activity:       false,
                 arrows:         false,
                 button:         false,
+                buttonAux:      false,
                 caption:        false,
                 enableKeyboard: true,
                 lockBody:       false,
@@ -116,8 +121,14 @@
                     if (options.button) {
                         closeButtonOn();
                     }
+                    if (options.buttonAux) {
+                        auxButtonOn();
+                    }
                     if (options.lockBody) {
                         lockBody(true);
+                    }
+                    if (options.caption) {
+                        $wrapper.append($captionObject);
                     }
                 },
                 onEnd: function () {
@@ -132,7 +143,7 @@
                         activityIndicatorOn();
                     }
                     if (options.caption) {
-                        captionOff();
+                        captionReset();
                     }
                 },
                 onLoadEnd: function () {
@@ -145,14 +156,12 @@
                     if (options.navigation) {
                         navigationUpdate(options.selector);
                     }
-                    if (options.caption) {
-                        captionOn();
-                    }
                 },
                 previousTarget: function () {
                     return this.previousTargetDefault();
                 },
                 previousTargetDefault: function () {
+                    $wrapper.trigger("previous.ilb2");
                     var targetIndex = targets.index(target) - 1;
                     if (targetIndex < 0) {
                         if (options.quitOnEnd === true) {
@@ -169,6 +178,7 @@
                     return this.nextTargetDefault();
                 },
                 nextTargetDefault: function () {
+                    $wrapper.trigger("next.ilb2");
                     var targetIndex = targets.index(target) + 1;
                     if (targetIndex >= targets.length) {
                         if (options.quitOnEnd === true) {
@@ -204,19 +214,18 @@
                     return false;
                 });
             },
-            captionOn = function () {
-                var captionText = "";
-                if ($(target).data("ilb2-caption")) {
-                    captionText = $(target).data("ilb2-caption");
-                } else if ($(target).find('img').length) {
-                    captionText = $(target).find('img').attr('alt');
-                }
-                if (captionText && captionText.length > 0) {
-                    $wrapper.append($captionObject.text(captionText));
-                }
+            auxButtonOn = function () {
+                $buttonAuxObject.appendTo($wrapper).on('click',function (e) {
+                    $(e.target).trigger("aux.imagelightbox");
+                });
             },
-            captionOff = function () {
+            captionReset = function () {
                 $captionObject.html("&nbsp;");
+                if ($(target).data("ilb2-caption")) {
+                    $captionObject.html($(target).data("ilb2-caption"));
+                } else if ($(target).find('img').length > 0) {
+                    $captionObject.html($(target).find('img').attr('alt'));
+}
             },
             navigationOn = function () {
                 var images = targets;
@@ -284,9 +293,11 @@
                 if (!image.length) {
                     return true;
                 }
+                var captionHeight = $captionObject.outerHeight();
+
 
                 var screenWidth = $(window).width() * 0.8,
-                    wHeight = (window.innerHeight) ? window.innerHeight : $(window).height(),
+                    wHeight = ((window.innerHeight) ? window.innerHeight : $(window).height()) - captionHeight,
                     screenHeight = wHeight * 0.9,
                     tmpImage = new Image();
 
@@ -473,11 +484,13 @@
                     options.onStart();
                 }
                 $('body').append($wrapper);
+                $wrapper.trigger("start.ilb2");
                 target = $target;
                 _loadImage();
             },
 
             _quitImageLightbox = function () {
+                $wrapper.trigger("quit.ilb2");
                 if (!image.length) {
                     return false;
                 }

@@ -16,7 +16,8 @@
             class: 'imagelightbox-arrow imagelightbox-arrow-right'}),
         $arrows = $arrowLeftObject.add($arrowRightObject),
         $captionObject = $('<div/>', {
-            id: 'imagelightbox-caption'
+            id: 'imagelightbox-caption',
+            html: "&nbsp;"
         }),
         $buttonObject =  $('<a/>', {
             id: 'imagelightbox-close'
@@ -126,6 +127,9 @@
                     if (options.lockBody) {
                         lockBody(true);
                     }
+                    if (options.caption) {
+                        $wrapper.append($captionObject);
+                    }
                 },
                 onEnd: function () {
                     targets = $([]);
@@ -139,7 +143,7 @@
                         activityIndicatorOn();
                     }
                     if (options.caption) {
-                        captionOff();
+                        captionReset();
                     }
                 },
                 onLoadEnd: function () {
@@ -151,9 +155,6 @@
                     }
                     if (options.navigation) {
                         navigationUpdate(options.selector);
-                    }
-                    if (options.caption) {
-                        captionOn();
                     }
                 },
                 previousTarget: function () {
@@ -218,19 +219,13 @@
                     $(e.target).trigger("aux.imagelightbox");
                 });
             },
-            captionOn = function () {
-                var captionText = "";
-                if ($(target).data("ilb2-caption")) {
-                    captionText = $(target).data("ilb2-caption");
-                } else if ($(target).find('img').length) {
-                    captionText = $(target).find('img').attr('alt');
-                }
-                if (captionText && captionText.length > 0) {
-                    $wrapper.append($captionObject.text(captionText));
-                }
-            },
-            captionOff = function () {
+            captionReset = function () {
                 $captionObject.html("&nbsp;");
+                if ($(target).data("ilb2-caption")) {
+                    $captionObject.html($(target).data("ilb2-caption"));
+                } else if ($(target).find('img').length > 0) {
+                    $captionObject.html($(target).find('img').attr('alt'));
+}
             },
             navigationOn = function () {
                 var images = targets;
@@ -298,9 +293,11 @@
                 if (!image.length) {
                     return true;
                 }
+                var captionHeight = $captionObject.outerHeight();
+
 
                 var screenWidth = $(window).width() * 0.8,
-                    wHeight = (window.innerHeight) ? window.innerHeight : $(window).height(),
+                    wHeight = ((window.innerHeight) ? window.innerHeight : $(window).height()) - captionHeight,
                     screenHeight = wHeight * 0.9,
                     tmpImage = new Image();
 
