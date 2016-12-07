@@ -227,11 +227,7 @@
                         $navObject.append($navItem.clone());
                     }
                     $wrapper.append($navObject);
-                    $navObject.on('click.ilb7 touchend.ilb7', function () {
-                        return false;
-                    });
-                    var navItems = $navObject.find('a');
-                    navItems.on('click.ilb7 touchend.ilb7', function () {
+                    $navObject.on('click.ilb7 touchend.ilb7', "a", function () {
                         var $this = $(this);
                         if (images.eq($this.index()).attr('href') !== $('#imagelightbox').attr('src')) {
                             var tmpTarget = targets.eq($this.index());
@@ -241,8 +237,8 @@
                                 _loadImage($this.index() < currentIndex ? 'left' : 'right');
                             }
                         }
-                        navItems.removeClass('active');
-                        navItems.eq($this.index()).addClass('active');
+                        $navObject.children().removeClass('active');
+                        $this.addClass('active');
                         return false;
                     }).on('touchend.ilb7', function () {
                         return false;
