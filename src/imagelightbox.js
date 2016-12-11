@@ -491,7 +491,10 @@
                 }
                 inProgress = false;
                 _onStart();
+
+                $('body > *').wrap('<div class="imagelightbox-blur"/>');
                 $('body').append($wrapper);
+
                 $wrapper.trigger("start.ilb2");
                 target = $target;
                 _loadImage();
