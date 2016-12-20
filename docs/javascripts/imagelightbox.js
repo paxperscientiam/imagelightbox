@@ -245,11 +245,10 @@
             targetSet = "",
             targets = $([]),
             target = $(),
-            image = $(),
+            image = new Image(),
             imageWidth = 0,
             imageHeight = 0,
             swipeDiff = 0,
-            inProgress = false,
 
             isTargetValid = function (validImage) {
                 var allowedTypes = options.allowedTypes;
@@ -300,176 +299,74 @@
             //   return classic || html5;
             // },
 
-            _setImage = function () {
-                if (!image.length) {
-                    return true;
-                }
+            _getSetImage = function () {
+                var imgPath = target.attr('href');
+		return new Promise(function(resolve, reject){
+		    image.id = options.id;
+		    image.src = imgPath;
+		    //
+                    image.onload = function () {
+                        resolve();
+                    };
+                    image.onerror = function () {
+                        reject(image.src);
+                    };
+		});
+	    },
+            _size = function () {
                 var captionHeight = $captionObject.outerHeight();
-
                 var screenWidth = $(window).width() * 0.8,
                     wHeight = ((window.innerHeight) ? window.innerHeight : $(window).height()) - captionHeight,
                     screenHeight = wHeight * 0.9,
-                    tmpImage = new Image();
+                    tmpImage = new Image(),
+                    obj = {};
 
-                tmpImage.src = image.attr('src');
-                tmpImage.onload = function () {
-                    imageWidth = tmpImage.width;
-                    imageHeight = tmpImage.height;
+                tmpImage.src = image.src;
+                imageWidth = tmpImage.width;
+                imageHeight = tmpImage.height;
+                //
+                //
+                if (imageWidth > screenWidth || imageHeight > screenHeight) {
+                    var ratio = imageWidth / imageHeight > screenWidth / screenHeight ? imageWidth / screenWidth : imageHeight / screenHeight;
+                    imageWidth /= ratio;
+                    imageHeight /= ratio;
+                }
 
-                    if (imageWidth > screenWidth || imageHeight > screenHeight) {
-                        var ratio = imageWidth / imageHeight > screenWidth / screenHeight ? imageWidth / screenWidth : imageHeight / screenHeight;
-                        imageWidth /= ratio;
-                        imageHeight /= ratio;
-                    }
-
-                    image.css({
-                        'width': imageWidth + 'px',
-                        'height': imageHeight + 'px',
-                        'top': ( wHeight - imageHeight ) / 2 + 'px',
-                        'left': ( $(window).width() - imageWidth ) / 2 + 'px'
-                    });
-                };
+                obj.width = imageWidth;
+                obj.height = imageHeight;
+                obj.top = ( wHeight - imageHeight ) / 2;
+                obj.left = ( $(window).width() - imageWidth ) / 2;
+                return obj;
             },
-
             _loadImage = function (direction) {
-                if (inProgress) {
-                    return false;
-                }
-
-                if (image.length) {
-                    var params = {'opacity': 0};
-                    if (isCssTransitionSupport) {
-                        cssTransitionTranslateX(image, ( 100 * direction ) - swipeDiff + 'px', options.animationSpeed / 1000);
-                    }
-                    else {
-                        params.left = parseInt(image.css('left')) + 100 * direction + 'px';
-                    }
-                    image.animate(params, options.animationSpeed, function () {
-                        _removeImage();
-                    });
-                    swipeDiff = 0;
-                }
-
-                inProgress = true;
                 _onLoadStart();
-
-                setTimeout(function () {
-                    var imgPath = target.attr('href');
-                    // if ( imgPath === undefined ) {
-                    //     imgPath = target.attr( 'data-lightbox' );
-                    // }
-                    image = $('<img id="' + options.id + '" />')
-                        .attr('src', imgPath)
-                        .on('load.ilb7', function () {
-                            $wrapper.trigger("loaded.ilb2");
-                            var params = {'opacity': 1};
-
-                            image.appendTo($wrapper);
-                            _setImage();
-                            image.css('opacity', 0);
-                            if (isCssTransitionSupport) {
-                                cssTransitionTranslateX(image, -100 * direction + 'px', 0);
-                                setTimeout(function () {
-                                    cssTransitionTranslateX(image, 0 + 'px', options.animationSpeed / 1000);
-                                }, 50);
-                            } else {
-                                var imagePosLeft = parseInt(image.css('left'));
-                                params.left = imagePosLeft + 'px';
-                                image.css('left', imagePosLeft - 100 * direction + 'px');
-                            }
-
-                            image.animate(params, options.animationSpeed, function () {
-                                inProgress = false;
-                                _onLoadEnd();
-                            });
-                            if (options.preloadNext) {
-                                var nextTarget = targets.eq(targets.index(target) + 1);
-                                if (!nextTarget.length) {
-                                    nextTarget = targets.eq(0);
-                                }
-                                $('<img />').attr('src', nextTarget.attr('href'));
-                            }
-                        })
-                        .on('error.ilb7', function () {
-                            _onLoadEnd();
+                _removeImage();
+                _getSetImage().then(
+                    function (success) {
+                        var dim = _size();
+		        $(image).css({
+                            'width': dim.width + 'px',
+                            'height': dim.height + 'px',
+                            'top':  dim.top + 'px',
+                            'left': dim.left + 'px'
                         });
-
-                    var swipeStart = 0,
-                        swipeEnd = 0,
-                        imagePosLeft = 0;
-
-                    image.on(hasPointers ? 'pointerup.ilb7 MSPointerUp.ilb7' : 'click.ilb7', function (e) {
-                        e.preventDefault();
-                        if (options.quitOnImgClick) {
-                            _quitImageLightbox();
-                            return false;
-                        }
-                        if (wasTouched(e.originalEvent)) {
-                            return true;
-                        }
-                        var posX = ( e.pageX || e.originalEvent.pageX ) - e.target.offsetLeft;
-                        if (imageWidth / 2 > posX) {
-                            _previousTarget();
-                        } else {
-                            _nextTarget();
-                        }
-                    })
-                        .on('touchstart.ilb7 pointerdown.ilb7 MSPointerDown.ilb7', function (e) {
-                            if (!wasTouched(e.originalEvent) || options.quitOnImgClick) {
-                                return true;
-                            }
-                            if (isCssTransitionSupport) {
-                                imagePosLeft = parseInt(image.css('left'));
-                            }
-                            swipeStart = e.originalEvent.pageX || e.originalEvent.touches[0].pageX;
-                        })
-                        .on('touchmove.ilb7 pointermove.ilb7 MSPointerMove.ilb7', function (e) {
-                            if (!wasTouched(e.originalEvent) || options.quitOnImgClick) {
-                                return true;
-                            }
-                            e.preventDefault();
-                            swipeEnd = e.originalEvent.pageX || e.originalEvent.touches[0].pageX;
-                            swipeDiff = swipeStart - swipeEnd;
-                            if (isCssTransitionSupport) {
-                                cssTransitionTranslateX(image, -swipeDiff + 'px', 0);
-                            } else {
-                                image.css('left', imagePosLeft - swipeDiff + 'px');
-                            }
-                        })
-                        .on('touchend.ilb7 touchcancel.ilb7 pointerup.ilb7 pointercancel.ilb7 MSPointerUp.ilb7 MSPointerCancel.ilb7', function (e) {
-                            if (!wasTouched(e.originalEvent) || options.quitOnImgClick) {
-                                return true;
-                            }
-                            if (Math.abs(swipeDiff) > 50) {
-                                if (swipeDiff < 0) {
-                                    _previousTarget();
-                                } else {
-                                    _nextTarget();
-                                }
-                            } else {
-                                if (isCssTransitionSupport) {
-                                    cssTransitionTranslateX(image, 0 + 'px', options.animationSpeed / 1000);
-                                } else {
-                                    image.animate({'left': imagePosLeft + 'px'}, options.animationSpeed / 2);
-                                }
-                            }
-                        });
-
-                }, options.animationSpeed + 100);
+                        $(image).css({'opacity': 0}).appendTo($wrapper);
+                        $(image).animate({'opacity': 1},{
+                            duration:options.animationSpeed});
+                    },
+		    function (failImage){
+                        console.log("Image source "+ failImage + " failed to load!");
+		    }
+                )
+                    .then(function (success) {
+                        _onLoadEnd();
+                    });
             },
             _removeImage = function () {
-                if (!image.length) {
-                    return false;
-                }
-                image.remove();
-                image = $();
+                $(image).remove();
             },
 
             _openImageLightbox = function ($target) {
-                if (inProgress) {
-                    return false;
-                }
-                inProgress = false;
                 _onStart();
                 $('body').append($wrapper);
                 if (options.lockBody) {
@@ -481,18 +378,17 @@
             },
 
             _quitImageLightbox = function () {
-                $wrapper.trigger("quit.ilb2");
                 if (options.lockBody) {
                     $("body").removeClass("imagelightbox-scroll-lock");
                 }
-                if (!image.length) {
-                    return false;
-                }
-                image.animate({'opacity': 0}, options.animationSpeed, function () {
-                    _removeImage();
-                    inProgress = false;
-                    targets = $([]);
-                    $wrapper.remove().find("*").remove();
+                $(image).animate({'opacity': 0},{
+                    duration:options.animationSpeed,
+                    complete: function () {
+                        $(image).remove();
+                        targets = $([]);
+                        $wrapper.trigger("quit.ilb2");
+                        $wrapper.remove().find("*").remove();
+                    }
                 });
             },
 
@@ -520,8 +416,18 @@
                         });
                 }
             };
+        $(window).on('resize.ilb7', function () {
+            var dim = _size();
+            $(image).css({
+                            'width': dim.width + 'px',
+                            'height': dim.height + 'px',
+                            'top':  dim.top + 'px',
+                            'left': dim.left + 'px'
+            });
+        }
+        );
 
-        $(window).on('resize.ilb7', _setImage);
+
 
         $(document).ready(function() {
             if (options.quitOnDocClick) {
