@@ -153,16 +153,11 @@
 
 .imagelightbox-arrow {
     cursor: pointer;
-    width: 3.75em; /* 60 */
-    height: 7.5em; /* 120 */
     background-color: #444;
     background-color: rgba( 0, 0, 0, .5 );
-    vertical-align: middle;
     display: none;
     position: fixed;
     z-index: 10001;
-    top: 50%;
-    margin-top: -3.75em; /* 60 */
 }
 .imagelightbox-arrow:hover,
 .imagelightbox-arrow:focus {
@@ -177,6 +172,27 @@
 }
 .imagelightbox-arrow-right {
     right: 2.5em; /* 40 */
+}
+.imagelightbox-arrow-left,
+.imagelightbox-arrow-right {
+    vertical-align: middle;
+    width: 3.75em; /* 60 */
+    height: 7.5em; /* 120 */
+    margin-top: -3.75em; /* 60 */
+    top: 50%;
+}
+.imagelightbox-arrow-top {
+    top: 2.5em;
+    right:calc(50% - 7.5em/2);
+    height: 3.75em; /* 60 */
+    width: 7.5em; /* 120 */
+
+}
+.imagelightbox-arrow-bottom {
+    bottom: 2.5em;
+    right:calc(50% - 7.5em/2);;
+    height: 3.75em; /* 60 */
+    width: 7.5em; /* 120 */
 }
 .imagelightbox-arrow:before {
     width: 0;
@@ -195,6 +211,16 @@
     border-right: none;
     border-left-color: #fff;
     margin-right: -0.313em; /* 5 */
+}
+.imagelightbox-arrow-top:before {
+    border-bottom: none;
+    border-top-color: #fff;
+    margin-top: -0.313em; /* 5 */
+}
+.imagelightbox-arrow-bottom:before {
+    border-top: none;
+    border-bottom-color: #fff;
+    margin-bottom: -0.313em; /* 5 */
 }
 
 #imagelightbox-loading,

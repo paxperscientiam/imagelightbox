@@ -14,7 +14,16 @@
         $arrowRightObject = $('<button/>',{
             type: 'button',
             class: 'imagelightbox-arrow imagelightbox-arrow-right'}),
-        $arrows = $arrowLeftObject.add($arrowRightObject),
+        $arrowTopObject = $('<button/>',{
+            type: 'button',
+            class: 'imagelightbox-arrow imagelightbox-arrow-top'}),
+        $arrowBottomObject = $('<button/>',{
+            type: 'button',
+            class: 'imagelightbox-arrow imagelightbox-arrow-bottom'}),
+        $arrows = $arrowLeftObject
+            .add($arrowRightObject)
+            .add($arrowTopObject)
+            .add($arrowBottomObject),
         $captionObject = $('<div/>', {
             id: 'imagelightbox-caption',
             html: "&nbsp;"
