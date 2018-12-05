@@ -162,7 +162,7 @@
                 if (options.caption) {
                     $wrapper.append($captionObject);
                 }
-                if (options.fullscreen) {
+                if (options.fullscreen && hasFullscreenSupport) {
                     $wrapper.append($fullscreenNotice);
                 }
             },
