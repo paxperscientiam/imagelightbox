@@ -124,7 +124,6 @@
             target = $(),
             $videos = $([]),
             targetIndex = -1,
-            $image = $(),
             imageWidth = 0,
             imageHeight = 0,
             swipeDiff = 0,
@@ -517,7 +516,7 @@
                         }
                         $wrapper.trigger('loaded.ilb2');
                     }
-                    $image = element
+                    var $image = element
                         .on('load.ilb7', onload)
                         .on('error.ilb7', function () {
                             _onLoadEnd();
