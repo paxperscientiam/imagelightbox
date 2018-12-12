@@ -403,7 +403,6 @@
             },
 
             _setImage = function () {
-                console.log("OH");
                 var captionHeight = options.caption ? $captionObject.outerHeight() : 0,
                     screenWidth = $(window).width(),
                     screenHeight = $(window).height() - captionHeight,
