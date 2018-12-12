@@ -120,11 +120,11 @@
 
     $.fn.imageLightbox = function (opts) {
         var targetSet = '',
-            targets = $([]),
+            $targets = $([]),
             target = $(),
-            videos = $([]),
+            $videos = $([]),
             targetIndex = -1,
-            image = $(),
+            $image = $(),
             imageWidth = 0,
             imageHeight = 0,
             swipeDiff = 0,
@@ -203,12 +203,12 @@
                 if(!hasHistorySupport || !options.history) {
                     return;
                 }
-                var newIndex = targets[targetIndex].dataset.ilb2Id;
+                var newIndex = $targets[targetIndex].dataset.ilb2Id;
                 if(!newIndex) {
                     newIndex = targetIndex;
                 }
                 var newState = {imageLightboxIndex: newIndex};
-                var set = targets[targetIndex].dataset.imagelightbox;
+                var set = $targets[targetIndex].dataset.imagelightbox;
                 if(set) {
                     newState.imageLightboxSet = set;
                 }
@@ -251,12 +251,12 @@
                 if(!id) {
                     return;
                 }
-                var element = targets.filter('[data-ilb2-id="' + id + '"]');
+                var element = $targets.filter('[data-ilb2-id="' + id + '"]');
                 if(element.length > 0) {
-                    targetIndex = targets.index(element);
+                    targetIndex = $targets.index(element);
                 } else {
                     targetIndex = id;
-                    element = $(targets[targetIndex]);
+                    element = $($targets[targetIndex]);
                 }
                 var set = _getQueryField('imageLightboxSet');
                 if(!element[0] || (!!set && set !== element[0].dataset.imagelightbox)) {
@@ -275,12 +275,12 @@
                     _quitImageLightbox(true);
                     return;
                 }
-                var element = targets.filter('[data-ilb2-id="' + newId + '"]');
+                var element = $targets.filter('[data-ilb2-id="' + newId + '"]');
                 if(element.length > 0) {
-                    var newIndex = targets.index(element);
+                    var newIndex = $targets.index(element);
                 } else {
                     newIndex = newId;
-                    element = $(targets[newIndex]);
+                    element = $($targets[newIndex]);
                 }
                 if(!element[0] || (newState.imageLightboxSet && newState.imageLightboxSet !== element[0].dataset.imagelightbox)) {
                     return;
@@ -305,17 +305,17 @@
                         return false;
                     }
                     else {
-                        targetIndex = targets.length - 1;
+                        targetIndex = $targets.length - 1;
                     }
                 }
-                target = targets.eq(targetIndex);
+                target = $targets.eq(targetIndex);
                 _pushToHistory();
                 $wrapper.trigger('previous.ilb2', target);
                 _loadImage(+1);
             },
             _nextTarget = function () {
                 targetIndex++;
-                if (targetIndex >= targets.length) {
+                if (targetIndex >= $targets.length) {
                     if (options.quitOnEnd === true) {
                         _quitImageLightbox();
                         return false;
@@ -325,7 +325,7 @@
                     }
                 }
                 _pushToHistory();
-                target = targets.eq(targetIndex);
+                target = $targets.eq(targetIndex);
                 $wrapper.trigger('next.ilb2', target);
                 _loadImage(-1);
             },
@@ -353,15 +353,15 @@
                 }
             },
             navigationOn = function () {
-                if (targets.length) {
-                    for (var i = 0; i < targets.length; i++) {
+                if ($targets.length) {
+                    for (var i = 0; i < $targets.length; i++) {
                         $navObject.append($navItem.clone());
                     }
                     var $navItems = $navObject.children('a');
-                    $navItems.eq(targets.index(target)).addClass('active');
+                    $navItems.eq($targets.index(target)).addClass('active');
                     //
                     $wrapper.on('previous.ilb2 next.ilb2', function () {
-                        $navItems.removeClass('active').eq(targets.index(target)).addClass('active');
+                        $navItems.removeClass('active').eq($targets.index(target)).addClass('active');
                     });
                     $wrapper.append($navObject);
                     //
@@ -371,10 +371,10 @@
                         })
                         .on('click.ilb7 touchend.ilb7', 'a', function () {
                             var $this = $(this);
-                            if (targets.eq($this.index()).attr('href') !== $('.imagelightbox').attr('src')) {
-                                var tmpTarget = targets.eq($this.index());
+                            if ($targets.eq($this.index()).attr('href') !== $('.imagelightbox').attr('src')) {
+                                var tmpTarget = $targets.eq($this.index());
                                 if (tmpTarget.length) {
-                                    currentIndex = targets.index(target);
+                                    currentIndex = $targets.index(target);
                                     target = tmpTarget;
                                     _loadImage($this.index() < currentIndex ? -1 : 1);
                                 }
@@ -403,8 +403,8 @@
             },
 
             _setImage = function () {
-                console.log('image: ' +image);
-                if (!image.length) {
+                console.log('image: ' +$image);
+                if (!$image.length) {
                     return true;
                 }
 
@@ -423,21 +423,21 @@
                         cssWidth = imageWidth*gutterFactor,
                         cssLeft = ($(window).width() - cssWidth ) / 2;
 
-                    image.css({
+                    $image.css({
                         'width': cssWidth + 'px',
                         'height': cssHeight + 'px',
                         'left':  cssLeft + 'px'
                     });
                 }
 
-                if(image.get(0).videoWidth !== undefined) {
-                    imageWidth = image.get(0).videoWidth;
-                    imageHeight = image.get(0).videoHeight;
+                if($image.get(0).videoWidth !== undefined) {
+                    imageWidth = $image.get(0).videoWidth;
+                    imageHeight = $image.get(0).videoHeight;
                     setSizes();
                     return;
                 }
                 var tmpImage = new Image();
-                tmpImage.src = image.attr('src');
+                tmpImage.src = $image.attr('src');
                 tmpImage.onload = function() {
                     imageWidth = tmpImage.width;
                     imageHeight = tmpImage.height;
@@ -446,15 +446,15 @@
             },
 
             _loadImage = function (direction) {
-                if (image.length && image[0].complete) {
+                if ($image.length && $image[0].complete) {
                     var params = {'opacity': 0};
                     if (hasCssTransitionSupport) {
-                        cssTransitionTranslateX(image, (100 * direction) - swipeDiff + 'px', options.animationSpeed / 1000);
+                        cssTransitionTranslateX($image, (100 * direction) - swipeDiff + 'px', options.animationSpeed / 1000);
                     }
                     else {
-                        params.left = parseInt(image.css('left')) + (100 * direction) + 'px';
+                        params.left = parseInt($image.css('left')) + (100 * direction) + 'px';
                     }
-                    image.animate(params, options.animationSpeed, function () {
+                    $image.animate(params, options.animationSpeed, function () {
                         _removeImage();
                     });
                     swipeDiff = 0;
@@ -474,7 +474,7 @@
                     var videoOptions = target.data('ilb2Video');
                     var preloadedVideo, element;
                     if (videoOptions) {
-                        videos.each(function() {
+                        $videos.each(function() {
                             if(this.i === target.data('ilb2VideoId')) {
                                 preloadedVideo = this.l;
                                 element = this.e;
@@ -495,33 +495,33 @@
                     function onload () {
                         var params = {'opacity': 1};
 
-                        image.appendTo($wrapper);
+                        $image.appendTo($wrapper);
                         _setImage();
-                        image.css('opacity', 0);
+                        $image.css('opacity', 0);
                         if (hasCssTransitionSupport) {
-                            cssTransitionTranslateX(image, -100 * direction + 'px', 0);
+                            cssTransitionTranslateX($image, -100 * direction + 'px', 0);
                             setTimeout(function () {
-                                cssTransitionTranslateX(image, 0 + 'px', options.animationSpeed / 1000);
+                                cssTransitionTranslateX($image, 0 + 'px', options.animationSpeed / 1000);
                             }, 50);
                         } else {
-                            var imagePosLeft = parseInt(image.css('left'));
+                            var imagePosLeft = parseInt($image.css('left'));
                             params.left = imagePosLeft + 'px';
-                            image.css('left', imagePosLeft - 100 * direction + 'px');
+                            $image.css('left', imagePosLeft - 100 * direction + 'px');
                         }
 
-                        image.animate(params, options.animationSpeed, function () {
+                        $image.animate(params, options.animationSpeed, function () {
                             _onLoadEnd();
                         });
                         if (options.preloadNext) {
-                            var nextTarget = targets.eq(targets.index(target) + 1);
+                            var nextTarget = $targets.eq($targets.index(target) + 1);
                             if (!nextTarget.length) {
-                                nextTarget = targets.eq(0);
+                                nextTarget = $targets.eq(0);
                             }
                             $('<img />').attr('src', nextTarget.attr('href'));
                         }
                         $wrapper.trigger('loaded.ilb2');
                     }
-                    image = element
+                    $image = element
                         .on('load.ilb7', onload)
                         .on('error.ilb7', function () {
                             _onLoadEnd();
@@ -547,7 +547,7 @@
                                 return true;
                             }
                             if (hasCssTransitionSupport) {
-                                imagePosLeft = parseInt(image.css('left'));
+                                imagePosLeft = parseInt($image.css('left'));
                             }
                             swipeStart = e.originalEvent.pageX || e.originalEvent.touches[0].pageX;
                         })
@@ -559,9 +559,9 @@
                             swipeEnd = e.originalEvent.pageX || e.originalEvent.touches[0].pageX;
                             swipeDiff = swipeStart - swipeEnd;
                             if (hasCssTransitionSupport) {
-                                cssTransitionTranslateX(image, -swipeDiff + 'px', 0);
+                                cssTransitionTranslateX($image, -swipeDiff + 'px', 0);
                             } else {
-                                image.css('left', imagePosLeft - swipeDiff + 'px');
+                                $image.css('left', imagePosLeft - swipeDiff + 'px');
                             }
                         })
                         .on('touchend.ilb7 touchcancel.ilb7 pointerup.ilb7 pointercancel.ilb7 MSPointerUp.ilb7 MSPointerCancel.ilb7', function (e) {
@@ -576,9 +576,9 @@
                                 }
                             } else {
                                 if (hasCssTransitionSupport) {
-                                    cssTransitionTranslateX(image, 0 + 'px', options.animationSpeed / 1000);
+                                    cssTransitionTranslateX($image, 0 + 'px', options.animationSpeed / 1000);
                                 } else {
-                                    image.animate({'left': imagePosLeft + 'px'}, options.animationSpeed / 2);
+                                    $image.animate({'left': imagePosLeft + 'px'}, options.animationSpeed / 2);
                                 }
                             }
                         });
@@ -586,23 +586,23 @@
                         onload();
                     }
                     if(preloadedVideo === false) {
-                        image = image.on('loadedmetadata.ilb7', onload);
+                        $image = $image.on('loadedmetadata.ilb7', onload);
                     }
 
                 }, options.animationSpeed + 100);
             },
 
             _removeImage = function () {
-                if (!image.length) {
+                if (!$image.length) {
                     return false;
                 }
-                image.remove();
-                image = $();
+                $image.remove();
+                $image = $();
             },
 
             _openImageLightbox = function ($target, noHistory) {
                 target = $target;
-                targetIndex = targets.index(target);
+                targetIndex = $targets.index(target);
                 if(!noHistory) {
                     _pushToHistory();
                 }
@@ -620,10 +620,10 @@
                 }
                 $wrapper.trigger('quit.ilb2');
                 $body.removeClass('imagelightbox-open');
-                if (!image.length) {
+                if (!$image.length) {
                     return false;
                 }
-                image.animate({'opacity': 0}, options.animationSpeed, function () {
+                $image.animate({'opacity': 0}, options.animationSpeed, function () {
                     _removeImage();
                     $wrapper.remove().find('*').remove();
                 });
@@ -631,13 +631,13 @@
 
             _addTargets = function (newTargets) {
                 newTargets.each(function() {
-                    targets = newTargets.add($(this));
+                    $targets = newTargets.add($(this));
                 });
                 newTargets.on('click.ilb7', {set: targetSet}, function (e) {
                     e.preventDefault();
                     targetSet = $(e.currentTarget).data('imagelightbox');
                     filterTargets();
-                    if (targets.length < 1) {
+                    if ($targets.length < 1) {
                         _quitImageLightbox();
                     } else {
                         _openImageLightbox($(this));
@@ -652,13 +652,13 @@
                             return isTargetValid($(this));
                         })
                         .each(function () {
-                            targets = targets.add($(this));
+                            $targets = $targets.add($(this));
                         });
                 }
             },
 
             _preloadVideos = function () {
-                targets.each(function() {
+                $targets.each(function() {
                     var videoOptions = $(this).data('ilb2Video');
                     if (videoOptions) {
                         var id = $(this).data('ilb2Id');
@@ -686,7 +686,7 @@
                         container.e.on('loadedmetadata.ilb7', function() {
                             container.l = true;
                         });
-                        videos = videos.add(container);
+                        $videos = $videos.add(container);
                     }
                 });
             };
@@ -700,7 +700,7 @@
 
             if (options.quitOnDocClick) {
                 $(document).on(hasTouch ? 'touchend.ilb7' : 'click.ilb7', function (e) {
-                    if (image.length && !$(e.target).is(image)) {
+                    if ($image.length && !$(e.target).is($image)) {
                         e.preventDefault();
                         _quitImageLightbox();
                     }
@@ -709,7 +709,7 @@
 
             if (options.fullscreen && hasFullscreenSupport) {
                 $(document).on('keydown.ilb7', function (e) {
-                    if (!image.length) {
+                    if (!$image.length) {
                         return true;
                     }
                     if([9,32,38,40].indexOf(e.which) > -1) {
@@ -726,7 +726,7 @@
 
             if (options.enableKeyboard) {
                 $(document).on('keydown.ilb7', function (e) {
-                    if (!image.length) {
+                    if (!$image.length) {
                         return true;
                     }
                     if ([27].indexOf(e.which) > -1 && options.quitOnEscKey) {
