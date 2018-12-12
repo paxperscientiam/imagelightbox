@@ -99,9 +99,9 @@
 
         fullscreenSupport = function () {
             return !!(document.fullscreenEnabled ||
-                document.webkitFullscreenEnabled ||
-                document.mozFullScreenEnabled ||
-                document.msFullscreenEnabled);
+                      document.webkitFullscreenEnabled ||
+                      document.mozFullScreenEnabled ||
+                      document.msFullscreenEnabled);
         },
         hasFullscreenSupport = fullscreenSupport() !== false,
         hasHistorySupport = !!(window.history && history.pushState);
@@ -124,7 +124,6 @@
             target = $(),
             $videos = $([]),
             targetIndex = -1,
-            $image = $(),
             imageWidth = 0,
             imageHeight = 0,
             swipeDiff = 0,
@@ -402,13 +401,13 @@
                 return $(element).prop('tagName').toLowerCase() === 'a' && ((new RegExp('\.(' + options.allowedTypes + ')$', 'i')).test($(element).attr('href')) || $(element).data('ilb2Video'));
             },
 
-            _setImage = function () {
+            _setImage = function ($image) {
                 var captionHeight = options.caption ? $captionObject.outerHeight() : 0,
                     screenWidth = $(window).width(),
                     screenHeight = $(window).height() - captionHeight,
                     gutterFactor = Math.abs(1 - options.gutter/100);
 
-                function setSizes () {
+                function setSizes ($image) {
                     if (imageWidth > screenWidth || imageHeight > screenHeight) {
                         var ratio = imageWidth / imageHeight > screenWidth / screenHeight ? imageWidth / screenWidth : imageHeight / screenHeight;
                         imageWidth /= ratio;
@@ -428,32 +427,35 @@
                 if($image.get(0).videoWidth !== undefined) {
                     imageWidth = $image.get(0).videoWidth;
                     imageHeight = $image.get(0).videoHeight;
-                    setSizes();
+                    setSizes($image);
                     return;
                 }
                 var tmpImage = new Image();
                 tmpImage.onload = function() {
                     imageWidth = tmpImage.width;
                     imageHeight = tmpImage.height;
-                    setSizes();
+                    setSizes($image);
                 };
-                console.log($image.attr('src'));
                 tmpImage.src = $image.attr('src');
             },
 
-            _loadImage = function (direction) {
-                if ($image.length && $image[0].complete) {
-                    var params = {'opacity': 0};
-                    if (hasCssTransitionSupport) {
-                        cssTransitionTranslateX($image, (100 * direction) - swipeDiff + 'px', options.animationSpeed / 1000);
+            _loadImage = function (direction, $image) {
+                // if ($image.length && $image[0].complete) {
+                if ($image.length) {
+                    if ($image[0].complete) {
+                        //                        console.log($image[0]);
+                        var params = {'opacity': 0};
+                        if (hasCssTransitionSupport) {
+                            cssTransitionTranslateX($image, (100 * direction) - swipeDiff + 'px', options.animationSpeed / 1000);
+                        }
+                        else {
+                            params.left = parseInt($image.css('left')) + (100 * direction) + 'px';
+                        }
+                        $image.animate(params, options.animationSpeed, function () {
+                            _removeImage();
+                        });
+                        swipeDiff = 0;
                     }
-                    else {
-                        params.left = parseInt($image.css('left')) + (100 * direction) + 'px';
-                    }
-                    $image.animate(params, options.animationSpeed, function () {
-                        _removeImage();
-                    });
-                    swipeDiff = 0;
                 }
                 _onLoadStart();
 
@@ -488,11 +490,12 @@
                         element = $('<img id=\'' + options.id + '\' />')
                             .attr('src', imgPath);
                     }
-                    function onload () {
+                    function onload (e) {
+                        $image = $(e.currentTarget);
                         var params = {'opacity': 1};
 
                         $image.appendTo($wrapper);
-                        _setImage();
+                        _setImage($image);
                         $image.css('opacity', 0);
                         if (hasCssTransitionSupport) {
                             cssTransitionTranslateX($image, -100 * direction + 'px', 0);
@@ -517,7 +520,7 @@
                         }
                         $wrapper.trigger('loaded.ilb2');
                     }
-                    $image = element
+                    var $image = element
                         .on('load.ilb7', onload)
                         .on('error.ilb7', function () {
                             _onLoadEnd();
@@ -578,6 +581,14 @@
                                 }
                             }
                         });
+
+                    $(document).on('quit.ilb2', function () {
+                        $image.animate({'opacity': 0}, options.animationSpeed, function () {
+                            _removeImage($image);
+                            $wrapper.remove().find('*').remove();
+                        });
+                    });
+
                     if(preloadedVideo === true) {
                         onload();
                     }
@@ -588,7 +599,7 @@
                 }, options.animationSpeed + 100);
             },
 
-            _removeImage = function () {
+            _removeImage = function ($image) {
                 if (!$image.length) {
                     return false;
                 }
@@ -606,7 +617,8 @@
                 $body.append($wrapper)
                     .addClass('imagelightbox-open');
                 $wrapper.trigger('start.ilb2', $target);
-                _loadImage(0);
+                //console.log(element);
+                _loadImage(0, $target);
             },
 
             _quitImageLightbox = function (noHistory) {
@@ -616,13 +628,6 @@
                 }
                 $wrapper.trigger('quit.ilb2');
                 $body.removeClass('imagelightbox-open');
-                if (!$image.length) {
-                    return false;
-                }
-                $image.animate({'opacity': 0}, options.animationSpeed, function () {
-                    _removeImage();
-                    $wrapper.remove().find('*').remove();
-                });
             },
 
             _addTargets = function (newTargets) {
@@ -694,20 +699,20 @@
 
         $(document).ready(function() {
 
-            if (options.quitOnDocClick) {
-                $(document).on(hasTouch ? 'touchend.ilb7' : 'click.ilb7', function (e) {
-                    if ($image.length && !$(e.target).is($image)) {
-                        e.preventDefault();
-                        _quitImageLightbox();
-                    }
-                });
-            }
+            // if (options.quitOnDocClick) {
+            //     $(document).on(hasTouch ? 'touchend.ilb7' : 'click.ilb7', function (e) {
+            //         // if ($image.length && !$(e.target).is($image)) {
+            //         //         e.preventDefault();
+            //         //_quitImageLightbox();
+            //         // }
+            //     });
+            // }
 
             if (options.fullscreen && hasFullscreenSupport) {
                 $(document).on('keydown.ilb7', function (e) {
-                    if (!$image.length) {
-                        return true;
-                    }
+                    // if (!$image.length) {
+                    //     return true;
+                    // }
                     if([9,32,38,40].indexOf(e.which) > -1) {
                         e.stopPropagation();
                         e.preventDefault();
@@ -722,9 +727,9 @@
 
             if (options.enableKeyboard) {
                 $(document).on('keydown.ilb7', function (e) {
-                    if (!$image.length) {
-                        return true;
-                    }
+                    // if (!$image.length) {
+                    //     return true;
+                    // }
                     if ([27].indexOf(e.which) > -1 && options.quitOnEscKey) {
                         e.stopPropagation();
                         e.preventDefault();
