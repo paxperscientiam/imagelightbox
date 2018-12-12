@@ -106,6 +106,18 @@
         hasFullscreenSupport = fullscreenSupport() !== false,
         hasHistorySupport = !!(window.history && history.pushState);
 
+
+
+    // if (img.complete) {
+    //     loaded()
+    // } else {
+    //     img.addEventListener('load', loaded)
+    //     img.addEventListener('error', function() {
+    //         alert('error')
+    //     })
+    // }
+
+
     $.fn.imageLightbox = function (opts) {
         var targetSet = '',
             targets = $([]),
@@ -116,7 +128,6 @@
             imageWidth = 0,
             imageHeight = 0,
             swipeDiff = 0,
-            inProgress = false,
             currentIndex = 0,
             options = $.extend({
                 selector:       'a[data-imagelightbox]',
@@ -392,6 +403,7 @@
             },
 
             _setImage = function () {
+                console.log('image: ' +image);
                 if (!image.length) {
                     return true;
                 }
@@ -424,7 +436,6 @@
                     setSizes();
                     return;
                 }
-
                 var tmpImage = new Image();
                 tmpImage.src = image.attr('src');
                 tmpImage.onload = function() {
@@ -435,11 +446,7 @@
             },
 
             _loadImage = function (direction) {
-                if (inProgress) {
-                    return false;
-                }
-
-                if (image.length) {
+                if (image.length && image[0].complete) {
                     var params = {'opacity': 0};
                     if (hasCssTransitionSupport) {
                         cssTransitionTranslateX(image, (100 * direction) - swipeDiff + 'px', options.animationSpeed / 1000);
@@ -452,8 +459,6 @@
                     });
                     swipeDiff = 0;
                 }
-
-                inProgress = true;
                 _onLoadStart();
 
                 setTimeout(function () {
@@ -505,7 +510,6 @@
                         }
 
                         image.animate(params, options.animationSpeed, function () {
-                            inProgress = false;
                             _onLoadEnd();
                         });
                         if (options.preloadNext) {
@@ -597,10 +601,6 @@
             },
 
             _openImageLightbox = function ($target, noHistory) {
-                if (inProgress) {
-                    return false;
-                }
-                inProgress = false;
                 target = $target;
                 targetIndex = targets.index(target);
                 if(!noHistory) {
@@ -625,7 +625,6 @@
                 }
                 image.animate({'opacity': 0}, options.animationSpeed, function () {
                     _removeImage();
-                    inProgress = false;
                     $wrapper.remove().find('*').remove();
                 });
             },

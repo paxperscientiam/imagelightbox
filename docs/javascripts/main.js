@@ -94,7 +94,6 @@ $(document).ready(function() {
     $(document)
         .on("start.ilb2", function (_, e) {
             console.log("start.ilb2");
-            console.log(e);
         })
         .on("quit.ilb2", function () {
             console.log("quit.ilb2");
@@ -104,10 +103,8 @@ $(document).ready(function() {
         })
         .on("previous.ilb2", function (_, e) {
             console.log("previous.ilb2");
-            console.log(e);
         })
         .on("next.ilb2", function (_, e) {
             console.log("next.ilb2");
-            console.log(e);
         });
 });
