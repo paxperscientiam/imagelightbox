@@ -403,11 +403,6 @@
             },
 
             _setImage = function () {
-                console.log('image: ' +$image);
-                if (!$image.length) {
-                    return true;
-                }
-
                 var captionHeight = options.caption ? $captionObject.outerHeight() : 0,
                     screenWidth = $(window).width(),
                     screenHeight = $(window).height() - captionHeight,
@@ -437,12 +432,13 @@
                     return;
                 }
                 var tmpImage = new Image();
-                tmpImage.src = $image.attr('src');
                 tmpImage.onload = function() {
                     imageWidth = tmpImage.width;
                     imageHeight = tmpImage.height;
                     setSizes();
                 };
+                console.log($image.attr('src'));
+                tmpImage.src = $image.attr('src');
             },
 
             _loadImage = function (direction) {
