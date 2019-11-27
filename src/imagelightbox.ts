@@ -1,15 +1,18 @@
-(function (factory): void {
-    // http://blog.npmjs.org/post/112712169830/making-your-jquery-plugin-work-better-with-npm
-    // If there is a variable named module and it has an exports property,
-    // then we're working in a Node-like environment. Use require to load
-    // the jQuery object that the module system is using and pass it in.
-    // Otherwise, we're working in a browser, so just pass in the global
-    // jQuery object.
-    factory((typeof module === 'object' && typeof module.exports === 'object') ? require('jquery') : jQuery, window, document );
-}(function ($: JQueryStatic, window: Window, document: LegacyDocument): void {
-    'use strict';
-    // COMPONENTS //
-    const $activityObject = $('<div/>')
+// http://blog.npmjs.org/post/112712169830/making-your-jquery-plugin-work-better-with-npm
+// If there is a variable named module and it has an exports property,
+// then we're working in a Node-like environment. Use require to load
+// the jQuery object that the module system is using and pass it in.
+// Otherwise, we're working in a browser, so just pass in the global
+// jQuery object.
+
+$.fn.imageLightbox = Object.assign<any, ImageLightboxPluginGlobalSettings>(
+    function(this: JQuery, options: ImageLightboxPluginSettings): JQuery {
+        // guard against double initialization
+        if ($.data( this, 'imagelightbox') != null) {
+            return this;
+        }
+        // COMPONENTS //
+        const $activityObject = $('<div/>')
             .attr('class','imagelightbox-loading')
             .append($('<div/>')),
         $arrowLeftObject = $('<button/>',{
@@ -21,7 +24,7 @@
         $arrows = $arrowLeftObject.add($arrowRightObject),
         $captionObject = $('<div/>', {
             class: 'imagelightbox-caption',
-            html: '&nbsp;'
+            html: '&nbsp;',
         }),
         $buttonObject =  $('<button/>', {
             type: 'button',
@@ -42,7 +45,7 @@
         }),
         $body = $('body');
 
-    const cssTransitionSupport = function (): string|boolean {
+        const cssTransitionSupport = function (): string|boolean {
             const s = (document.body || document.documentElement).style as LegacyCSSStyleDeclaration;
             if (s.transition === '') {
                 return '';
@@ -92,21 +95,21 @@
         },
 
         hasFullscreenSupport = !!(document.fullscreenEnabled ||
-                document.webkitFullscreenEnabled ||
-                document.mozFullScreenEnabled ||
-                document.msFullscreenEnabled),
+                                  document.webkitFullscreenEnabled ||
+                                  document.mozFullScreenEnabled ||
+                                  document.msFullscreenEnabled),
         hasHistorySupport = !!(window.history && history.pushState);
 
-    $.fn.imageLightbox = function (opts: Partial<ILBOptions>): JQuery {
-        let currentIndex = 0;
-        let image = $();
-        let inProgress = false;
-        let swipeDiff = 0;
-        let target = $();
-        let targetIndex = -1;
-        let targets: JQuery = $([]);
-        let targetSet = '';
-        const videos: Array<PreloadedVideo> = [],
+        $.fn.imageLightbox = function (opts: Partial<ILBOptions>): JQuery {
+            let currentIndex = 0;
+            let image = $();
+            let inProgress = false;
+            let swipeDiff = 0;
+            let target = $();
+            let targetIndex = -1;
+            let targets: JQuery = $([]);
+            let targetSet = '';
+            const videos: Array<PreloadedVideo> = [],
             options = $.extend({
                 selector:       'a[data-imagelightbox]',
                 id:             'imagelightbox',
@@ -389,9 +392,9 @@
                 }
 
                 const captionHeight = options.caption ? $captionObject.outerHeight()! : 0,
-                    screenWidth = $(window).width()!,
-                    screenHeight = $(window).height()! - captionHeight,
-                    gutterFactor = Math.abs(1 - options.gutter/100);
+                screenWidth = $(window).width()!,
+                screenHeight = $(window).height()! - captionHeight,
+                gutterFactor = Math.abs(1 - options.gutter/100);
 
                 function setSizes (imageWidth: number, imageHeight: number): void {
                     if (imageWidth > screenWidth || imageHeight > screenHeight) {
@@ -400,8 +403,8 @@
                         imageHeight /= ratio;
                     }
                     const cssHeight = imageHeight*gutterFactor,
-                        cssWidth = imageWidth*gutterFactor,
-                        cssLeft = ($(window).width()! - cssWidth ) / 2;
+                    cssWidth = imageWidth*gutterFactor,
+                    cssLeft = ($(window).width()! - cssWidth ) / 2;
 
                     image.css({
                         'width': cssWidth + 'px',
@@ -685,115 +688,122 @@
                 });
             };
 
-        $(window).on('resize.ilb7', _setImage);
-        if(hasHistorySupport && options.history) {
-            $(window).on('popstate', _popHistory);
-        }
-
-        $(document).ready(function(): void {
-
-            if (options.quitOnDocClick) {
-                $(document).on(hasTouch ? 'touchend.ilb7' : 'click.ilb7', function (e): void {
-                    if (image.length && !$(e.target).is(image)) {
-                        e.preventDefault();
-                        _quitImageLightbox();
-                    }
-                });
+            $(window).on('resize.ilb7', _setImage);
+            if (hasHistorySupport && options.history) {
+                $(window).on('popstate', _popHistory);
             }
 
-            if (options.fullscreen && hasFullscreenSupport) {
-                $(document).on('keydown.ilb7', function (e): void {
-                    if (!image.length) {
-                        return;
-                    }
-                    if([9,32,38,40].includes(e.which!)) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                    }
-                    if ([13].includes(e.which!)) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        toggleFullScreen();
-                    }
-                });
+            $(document).ready((): void => {
+
+                if (options.quitOnDocClick) {
+                    $(document).on(hasTouch ? 'touchend.ilb7' : 'click.ilb7', function (e): void {
+                        if (image.length && !$(e.target).is(image)) {
+                            e.preventDefault();
+                            _quitImageLightbox();
+                        }
+                    });
+                }
+
+                if (options.fullscreen && hasFullscreenSupport) {
+                    $(document).on('keydown.ilb7', function (e): void {
+                        if (!image.length) {
+                            return;
+                        }
+                        if([9, 32 ,38 ,40].includes(e.which!)) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                        }
+                        if ([13].includes(e.which!)) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            toggleFullScreen();
+                        }
+                    });
+                }
+
+                if (options.enableKeyboard) {
+                    $(document).on('keydown.ilb7', (e): void => {
+                        if (!image.length) {
+                            return;
+                        }
+                        if ([27].includes(e.which!) && options.quitOnEscKey) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            _quitImageLightbox();
+                        }
+                        if ([37].includes(e.which!)) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            _previousTarget();
+                        }
+                        if ([39].includes(e.which!)) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            _nextTarget();
+                        }
+                    });
+                }
+            });
+
+            function toggleFullScreen(): void {
+                const doc = window.document as LegacyDocument;
+                const docEl = document.getElementById(options.id)!.parentElement as LegacyHTMLElement;
+
+                const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+                const exitFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+                if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                    requestFullScreen.call(docEl);
+                }
+                else {
+                    exitFullScreen.call(doc);
+                }
             }
 
-            if (options.enableKeyboard) {
-                $(document).on('keydown.ilb7', function (e): void {
-                    if (!image.length) {
-                        return;
-                    }
-                    if ([27].includes(e.which!) && options.quitOnEscKey) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        _quitImageLightbox();
-                    }
-                    if ([37].includes(e.which!)) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        _previousTarget();
-                    }
-                    if ([39].includes(e.which!)) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        _nextTarget();
-                    }
-                });
-            }
-        });
+            $(document).off('click', options.selector);
 
-        function toggleFullScreen(): void {
-            const doc = window.document as LegacyDocument;
-            const docEl = document.getElementById(options.id)!.parentElement as LegacyHTMLElement;
+            _addTargets($(this));
 
-            const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-            const exitFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-
-            if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-                requestFullScreen.call(docEl);
-            }
-            else {
-                exitFullScreen.call(doc);
-            }
-        }
-
-        $(document).off('click', options.selector);
-
-        _addTargets($(this));
-
-        _openHistory();
-
-        _preloadVideos(targets);
-
-        this.addToImageLightbox = function (elements: JQuery): void  {
-            _addTargets(elements);
-            _preloadVideos(elements);
-        };
-
-        this.openHistory = function (): void {
             _openHistory();
-        };
 
-        this.loadPreviousImage = function (): void {
-            _previousTarget();
-        };
+            _preloadVideos(targets);
 
-        this.loadNextImage = function (): void {
-            _nextTarget();
-        };
+            this.addToImageLightbox = function (elements: JQuery): void  {
+                _addTargets(elements);
+                _preloadVideos(elements);
+            };
 
-        this.quitImageLightbox = function (): JQuery {
-            _quitImageLightbox();
+            this.openHistory = function (): void {
+                _openHistory();
+            };
+
+            this.loadPreviousImage = function (): void {
+                _previousTarget();
+            };
+
+            this.loadNextImage = function (): void {
+                _nextTarget();
+            };
+
+            this.quitImageLightbox = function (): JQuery {
+                _quitImageLightbox();
+                return this;
+            };
+
+            this.startImageLightbox = function (element: JQuery): void {
+                if (element)
+                    element.trigger('click.ilb7');
+                else
+                    $(this).trigger('click.ilb7');
+            };
+
             return this;
         };
+        return this
+    },
+    {
+        options: {
 
-        this.startImageLightbox = function (element: JQuery): void {
-            if (element)
-                element.trigger('click.ilb7');
-            else
-                $(this).trigger('click.ilb7');
-        };
-
-        return this;
-    };
-}));
+        },
+    },
+)

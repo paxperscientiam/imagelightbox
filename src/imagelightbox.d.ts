@@ -1,3 +1,11 @@
+declare interface ImageLightboxPluginGlobalSettings {
+    lol: string;
+}
+
+declare interface ImageLightboxPluginSettings {
+    lol: string;
+}
+
 declare class LegacyCSSStyleDeclaration extends CSSStyleDeclaration
 {
     public MozTransition: string;
