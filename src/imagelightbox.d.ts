@@ -1,11 +1,3 @@
-declare interface ImageLightboxPluginGlobalSettings {
-    lol: string;
-}
-
-declare interface ImageLightboxPluginSettings {
-    lol: string;
-}
-
 declare class LegacyCSSStyleDeclaration extends CSSStyleDeclaration
 {
     public MozTransition: string;
@@ -34,4 +26,14 @@ declare class LegacyHTMLElement extends HTMLElement
 declare class LegacyPointerEvent extends PointerEvent
 {
     public MSPOINTER_TYPE_MOUSE: string;
+}
+
+interface ImageLightboxPlugin extends ILBOptions {
+    options: any;
+
+    arrowsOn: () => void;
+    loadPreviousImage: () => void;
+
+    isTargetValid: () => boolean;
+    quitImageLightbox: () => any;
 }

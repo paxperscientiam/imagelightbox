@@ -1,10 +1,13 @@
-interface JQuery
-{
-    imageLightbox(opts: Partial<ILBOptions>): JQuery;
-    addToImageLightbox(elements: JQuery): void;
-    openHistory(): void;
-    loadPreviousImage(): void;
-    loadNextImage(): void;
-    quitImageLightbox(): void;
-    startImageLightbox(element: JQuery): void;
+interface JQuery {
+    imageLightbox: ImageLightboxPlugin;
 }
+// interface JQuery
+// {
+//     imageLightbox(opts: Partial<ILBOptions>): JQuery;
+//     addToImageLightbox(elements: JQuery): void;
+//     openHistory(): void;
+//     loadPreviousImage(): void;
+//     loadNextImage(): void;
+//     quitImageLightbox(): void;
+//     startImageLightbox(element: JQuery): void;
+// }
