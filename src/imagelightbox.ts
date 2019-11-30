@@ -60,9 +60,9 @@ export class ImageLightbox implements ImageLightboxPlugin {
 
         const tmpImage = new Image();
         tmpImage.src = self.image.attr('src')!;
-        tmpImage.onload = function (i: any): void {
+        tmpImage.onload = function (): void {
             // tmpImage.width, imageHeight: tmpImage.height
-            setSizes({width:screenWidth, height:screenHeight}, {width: tmpImage.width, height:tmpImage.height, gutterFactor}, i.srcElement);
+            self.image = setSizes({width:screenWidth, height:screenHeight}, {width: tmpImage.width, height:tmpImage.height, gutterFactor}, $(elementT as JQuery<HTMLImageElement>));
         };
 
         $(window).on('resize.ilb7', this._setImage);
@@ -451,7 +451,7 @@ export class ImageLightbox implements ImageLightboxPlugin {
                 cssTransitionTranslateX(this.image, (100 * direction) - this.swipeDiff + 'px', self.options.animationSpeed / 1000);
             }
             else {
-                params.left = parseInt(this.image.css('left')) + (100 * direction) + 'px';
+                params.left = parseInt(self.image.css('left')) + (100 * direction) + 'px';
             }
             this.image.animate(params, self.options.animationSpeed, function (): void {
                 self._removeImage();

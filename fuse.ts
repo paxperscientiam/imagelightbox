@@ -32,7 +32,7 @@ const app = new TypeDoc.Application({
     logger: 'console',
     mode:   'file',
     module: 'CommonJS',
-    target: 'ES5',
+    target: 'ES3',
 })
 
 const project = app.convert(app.expandInputFiles(['src', 'src/@types']))
@@ -74,8 +74,9 @@ import {
     task,
 } from 'fuse-box/sparky'
 
-function aggregatePostCSSPlugins(plugins: any[]) {
+function aggregatePlugins(plugins: any[]) {
     return plugins.filter((plugin) => plugin !== false)
+
 }
 
 class CTX {
@@ -94,10 +95,10 @@ class CTX {
             homeDir:  dlv(PKG, 'homeDir') || 'src',
             output: 'dist/$name.js',
 
-            target: 'browser@es5',
+            target: 'browser@es3',
 
             cache: true,
-            plugins: [
+            plugins: aggregatePlugins( [
                 EnvPlugin({
                     COMPILE_TIME: `${Date.now().toString()}`,
                     PROJECT_NAME: 'bookblock',
@@ -112,30 +113,33 @@ class CTX {
                         importer: true,
                         //                        resources: [{ test: /.*/, file: 'resources.scss' }],
                     }),
-                    // PostCSSPlugin(aggregatePostCSSPlugins(
-                    //     [
-                    //         Unprefix(),
-                    //         Autoprefixer(),
-                    //         Cssnano(),
-                    //         // this.isProduction && Banner({
-                    //         //     banner: bannerStatement(this.isProduction),
-                    //         //     important: true,
-                    //         // }),
-                    //         Banner({
-                    //             banner: bannerStatement(this.isProduction),
-                    //             important: true,
-                    //         }),
+                    PostCSSPlugin(aggregatePlugins(
+                        [
+                            Unprefix(),
+                            Autoprefixer(),
+                            Cssnano(),
+                            // this.isProduction && Banner({
+                            //     banner: bannerStatement(this.isProduction),
+                            //     important: true,
+                            // }),
+                            Banner({
+                                banner: bannerStatement(this.isProduction),
+                                important: true,
+                            }),
 
-                    //     ])),
+                        ])),
                     CSSResourcePlugin({
                         dist: 'dist/css-resources',
                         inline: true,
                     }),
                     CSSPlugin({inject: true}),
                 ],
-                TerserPlugin({
+                this.isProduction && TerserPlugin({
                     compress: {
                         drop_console: true,
+                    },
+                    mangle: {
+                        properties: true,
                     },
                     output: {
                         comments: 'some',
@@ -144,10 +148,10 @@ ${bannerStatement(this.isProduction)}
 */`,
                     },
                 }),
-                QuantumPlugin({
+                this.isProduction && QuantumPlugin({
                     replaceProcessEnv: true,
 
-                    ensureES5: true,
+                    //ensureES5: true,
                     target: 'browser',
 
                     css: {
@@ -158,7 +162,7 @@ ${bannerStatement(this.isProduction)}
                         'default/src**': 'css/app.min.css',
                     },
 
-                    // bakeApiIntoBundle: 'imagelightbox',
+                    bakeApiIntoBundle: 'imagelightbox',
                     // containedAPI: true,
                     treeshake: true,
                     // settings come from Terser Plugin
@@ -166,6 +170,7 @@ ${bannerStatement(this.isProduction)}
                 }),
                 //                 BannerPlugin(`/*! ${bannerStatement(this.isProduction)} */`),
             ],
+                                     )
         })
     }
 
@@ -234,15 +239,16 @@ task('watch', async (context: CTX) => {
     })
 })
 
-task('build', ['test:ts'], async (context: CTX) => {
+task('build', ['test:ts'], (context: CTX) => {
     context.isProduction = true
-    console.log('PRODUCTION BUILD')
+    //console.log('PRODUCTION BUILD')
     //    const fuse = context.getConfig()
-    await exec('default')
+    return exec('default')
 })
 
 task('default', ['clean'], async (context: CTX) => {
     const fuse = context.getConfig()
+    console.log(`prod ${context.isProduction}`)
     if (!context.isProduction) {
         fuse.dev()
         fs.watch('./src/index.html', {
@@ -258,11 +264,9 @@ task('default', ['clean'], async (context: CTX) => {
         })
     }
 
-    //    context.createBundle(fuse, '~ index.ts', 'vendor')
-
     context.createBundle(fuse, '> index.ts', 'imagelightbox')
 
-    await fuse.run()
+    return await fuse.run()
 })
 
 task('test:ts', [], async (context: CTX) => {

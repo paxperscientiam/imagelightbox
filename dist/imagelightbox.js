@@ -1,4 +1,1355 @@
-/*!
-production: true
-*/
-!function(t){t.f[0]=function(e,i){Object.defineProperty(i,"__esModule",{value:!0});var n=t.r(5),o=t.r(1);$.fn.imageLightbox=Object.assign((function(t){var e=this;if(null!=$.data(this,"imageLightbox"))return this;var i=n.__assign(n.__assign({},$.fn.imageLightbox.options),t);return $(document).off("click",t.selector),this.each((function(){$.data(e,$.fn.imageLightbox.PROJECT_NAME,new o.ImageLightbox(i,e))})),this}),{PROJECT_NAME:"imageLightbox",options:{selector:"a[data-imagelightbox]",id:"imagelightbox",allowedTypes:"png|jpg|jpeg|gif",animationSpeed:250,activity:!1,arrows:!1,button:!1,caption:!1,enableKeyboard:!0,history:!1,fullscreen:!1,gutter:10,offsetY:0,navigation:!1,overlay:!1,preloadNext:!0,quitOnEnd:!1,quitOnImgClick:!1,quitOnDocClick:!0,quitOnEscKey:!0}})},t.f[1]=function(e,i){Object.defineProperty(i,"__esModule",{value:!0});var n=t.r(2),o=t.r(3),r=t.r(4),a=function(){function t(t,e){this.currentIndex=0,this.inProgress=!1,this.swipeDiff=0,this.target=$(),this.targetIndex=-1,this.targets=$([]),this.targetSet="",this.videos=[],this.PROJECT_NAME="imageLightbox";var i=this;this.image=$(e),this.options=t;var a=t.caption?r.$components.$captionObject.outerHeight():0,s=$(window).width(),c=$(window).height()-a,p=Math.abs(1-t.gutter/100);if(void 0===this.image.get(0).videoWidth){var l=new Image;l.src=i.image.attr("src"),l.onload=function(t){o.setSizes({width:s,height:c},{width:l.width,height:l.height,gutterFactor:p},t.srcElement)},$(window).on("resize.ilb7",this._setImage),n.hasHistorySupport&&t.history&&$(window).on("popstate",this._popHistory),$(document).ready((function(){t.quitOnDocClick&&$(document).on(n.hasTouch?"touchend.ilb7":"click.ilb7",(function(t){i.image.length&&!$(t.target).is(i.image)&&(t.preventDefault(),i._quitImageLightbox())})),t.fullscreen&&n.hasFullscreenSupport&&$(document).on("keydown.ilb7",(function(e){i.image.length&&([9,32,38,40].includes(e.which)&&(e.stopPropagation(),e.preventDefault()),[13].includes(e.which)&&(e.stopPropagation(),e.preventDefault(),n.toggleFullScreen(t.id)))})),t.enableKeyboard&&$(document).on("keydown.ilb7",(function(e){i.image.length&&([27].includes(e.which)&&t.quitOnEscKey&&(e.stopPropagation(),e.preventDefault(),i._quitImageLightbox()),[37].includes(e.which)&&(e.stopPropagation(),e.preventDefault(),i._previousTarget()),[39].includes(e.which)&&(e.stopPropagation(),e.preventDefault(),i._nextTarget()))}))})),this._addTargets($()),this._openHistory(),this._preloadVideos(this.targets)}}return t.prototype._onStart=function(){this.options.arrows&&this.arrowsOn(),this.options.navigation&&this.navigationOn(),this.options.overlay&&this.overlayOn(),this.options.button&&this.closeButtonOn(),this.options.caption&&r.$components.$wrapper.append(r.$components.$captionObject)},t.prototype._onLoadStart=function(){this.options.activity&&this.activityIndicatorOn(),this.options.caption&&this.captionReset()},t.prototype._onLoadEnd=function(){this.options.activity&&this.activityIndicatorOff(),this.options.arrows&&r.$components.$arrows.css("display","block")},t.prototype._addQueryField=function(t,e,i){var n=e+"="+i,o="?"+n;if(t){var r=new RegExp("([?&])"+e+"=[^&]*");o=null!==r.exec(t)?t.replace(r,"$1"+n):t+"&"+n}return o},t.prototype._pushToHistory=function(){if(n.hasHistorySupport&&this.options.history){var t=this.targets[this.targetIndex].dataset.ilb2Id;t||(t=this.targetIndex.toString());var e={imageLightboxIndex:t,imageLightboxSet:""},i=this.targets[this.targetIndex].dataset.imagelightbox;i&&(e.imageLightboxSet=i);var o=this._addQueryField(document.location.search,"imageLightboxIndex",t);i&&(o=this._addQueryField(o,"imageLightboxSet",i)),window.history.pushState(e,"",document.location.pathname+o)}},t.prototype._removeQueryField=function(t,e){var i=t;if(i){var n=new RegExp("\\?"+e+"=[^&]*"),o=new RegExp("&"+e+"=[^&]*");i=(i=i.replace(n,"?")).replace(o,"")}return i},t.prototype._pushQuitToHistory=function(){if(n.hasHistorySupport&&this.options.history){var t=this._removeQueryField(document.location.search,"imageLightboxIndex");t=this._removeQueryField(t,"imageLightboxSet"),window.history.pushState({},"",document.location.pathname+t)}},t.prototype._getQueryField=function(t){var e=new RegExp("[?&]"+t+"(=([^&#]*)|&|#|$)").exec(document.location.search);if(e&&e[2])return decodeURIComponent(e[2].replace(/\+/g," "))},t.prototype._openHistory=function(){if(n.hasHistorySupport&&this.options.history){var t=this._getQueryField("imageLightboxIndex");if(t){var e=this.targets.filter('[data-ilb2-id="'+t+'"]');e.length>0?this.targetIndex=this.targets.index(e):(this.targetIndex=parseInt(t),e=$(this.targets[this.targetIndex]));var i=this._getQueryField("imageLightboxSet");!e[0]||i&&i!==e[0].dataset.imagelightbox||this._openImageLightbox(e,!0)}}},t.prototype._popHistory=function(t){var e=t.originalEvent.state;if(e){var i=e.imageLightboxIndex;if(void 0!==i){var n=this.targets.filter('[data-ilb2-id="'+i+'"]'),o=i;if(n.length>0?o=this.targets.index(n):n=$(this.targets[o]),n[0]&&(!e.imageLightboxSet||e.imageLightboxSet===n[0].dataset.imagelightbox))if(this.targetIndex<0)this._openImageLightbox(n,!0);else{var r=1;o>this.targetIndex&&(r=-1),this.target=n,this.targetIndex=o,this._loadImage(r)}}else this._quitImageLightbox(!0)}else this._quitImageLightbox(!0)},t.prototype._nextTarget=function(){if(this.targetIndex++,this.targetIndex>=this.targets.length){if(!0===this.options.quitOnEnd)return void this._quitImageLightbox();this.targetIndex=0}this._pushToHistory(),this.target=this.targets.eq(this.targetIndex),r.$components.$wrapper.trigger("next.ilb2",this.target),this._loadImage(-1)},t.prototype.activityIndicatorOn=function(){r.$components.$wrapper.append(r.$components.$activityObject)},t.prototype.activityIndicatorOff=function(){$(".imagelightbox-loading").remove()},t.prototype.overlayOn=function(){r.$components.$wrapper.append(r.$components.$overlayObject)},t.prototype.closeButtonOn=function(){var t=this;r.$components.$buttonObject.appendTo(r.$components.$wrapper).on("click.ilb7",(function(){t._quitImageLightbox()}))},t.prototype.captionReset=function(){r.$components.$captionObject.css("opacity","0"),r.$components.$captionObject.html("&nbsp;"),$(this.target).data("ilb2-caption")?(r.$components.$captionObject.css("opacity","1"),r.$components.$captionObject.html($(this.target).data("ilb2-caption"))):$(this.target).find("img").attr("alt")&&(r.$components.$captionObject.css("opacity","1"),r.$components.$captionObject.html($(this.target).find("img").attr("alt")))},t.prototype.navigationOn=function(){var t=this;if(this.targets.length){for(var e=0;e<this.targets.length;e++)r.$components.$navObject.append(r.$components.$navItem.clone());var i=r.$components.$navObject.children("a");i.eq(this.targets.index(this.target)).addClass("active"),r.$components.$wrapper.on("previous.ilb2 next.ilb2",(function(){i.removeClass("active").eq(t.targets.index(t.target)).addClass("active")})),r.$components.$wrapper.append(r.$components.$navObject),r.$components.$navObject.on("click.ilb7 touchend.ilb7",(function(){return!1})).on("click.ilb7 touchend.ilb7","a",(function(){var t=$(this);if(this.targets.eq(t.index()).attr("href")!==$(".imagelightbox").attr("src")){var e=this.targets.eq(t.index());e.length&&(this.currentIndex=this.targets.index(this.target),this.target=e,this._loadImage(t.index()<this.currentIndex?-1:1))}t.addClass("active").siblings().removeClass("active")}))}},t.prototype.arrowsOn=function(){var t=this;r.$components.$wrapper.append(r.$components.$arrows),r.$components.$arrows.on("click.ilb7 touchend.ilb7",(function(e){e.stopImmediatePropagation(),e.preventDefault(),$(this).hasClass("imagelightbox-arrow-left")?t._previousTarget():t._nextTarget()}))},t.prototype.isTargetValid=function(t){return"a"===$(t).prop("tagName").toLowerCase()&&(new RegExp(".("+this.options.allowedTypes+")$","i").test($(t).attr("href"))||$(t).data("ilb2Video"))},t.prototype._setImage=function(){this.image.length},t.prototype._previousTarget=function(){if(this.targetIndex--,this.targetIndex<0){if(!0===this.options.quitOnEnd)return void this._quitImageLightbox();this.targetIndex=this.targets.length-1}this.target=this.targets.eq(this.targetIndex),this._pushToHistory(),r.$components.$wrapper.trigger("previous.ilb2",this.target),this._loadImage(1)},t.prototype.addToImageLightbox=function(t){this._addTargets(t),this._preloadVideos(t)},t.prototype.openHistory=function(){this._openHistory()},t.prototype.loadPreviousImage=function(){this._previousTarget()},t.prototype.loadNextImage=function(){this._nextTarget()},t.prototype.quitImageLightbox=function(){this._quitImageLightbox()},t.prototype.startImageLightbox=function(t){t?t.trigger("click.ilb7"):$(this).trigger("click.ilb7")},t.prototype._loadImage=function(t){var e=this;if(!this.inProgress){if(this.image.length){var i={opacity:0,left:""};n.hasCssTransitionSupport?n.cssTransitionTranslateX(this.image,100*t-this.swipeDiff+"px",e.options.animationSpeed/1e3):i.left=parseInt(this.image.css("left"))+100*t+"px",this.image.animate(i,e.options.animationSpeed,(function(){e._removeImage()})),this.swipeDiff=0}this.inProgress=!0,this._onLoadStart(),setTimeout((function(){var i,o=0,a=0,s=0,c=e.target.attr("href"),p=e.target.data("ilb2Video"),l=$();function u(){var i={opacity:1,left:""};if(e.image.appendTo(r.$components.$wrapper),e._setImage(),e.image.css("opacity",0),n.hasCssTransitionSupport?(n.cssTransitionTranslateX(e.image,-100*t+"px",0),setTimeout((function(){n.cssTransitionTranslateX(e.image,"0px",e.options.animationSpeed/1e3)}),50)):(s=parseInt(e.image.css("left")),i.left=s+"px",e.image.css("left",s-100*t+"px")),e.image.animate(i,e.options.animationSpeed,(function(){e.inProgress=!1,e._onLoadEnd()})),e.options.preloadNext){var o=e.targets.eq(e.targets.index(e.target)+1);o.length||(o=e.targets.eq(0)),$("<img />").attr("src",o.attr("href"))}r.$components.$wrapper.trigger("loaded.ilb2")}p?$.each(e.videos,(function(t,n){n.i===e.target.data("ilb2VideoId")&&(i=n.l,l=n.e,n.a&&(!1===i&&l.attr("autoplay",n.a),!0===i&&l.get(0).play()))})):l=$("<img id='"+e.options.id+"' />").attr("src",c),e.image=l.on("load.ilb7",u).on("error.ilb7",(function(){e._onLoadEnd()})).on("touchstart.ilb7 pointerdown.ilb7 MSPointerDown.ilb7",(function(t){n.wasTouched(t.originalEvent)&&!e.options.quitOnImgClick&&(n.hasCssTransitionSupport&&(s=parseInt(e.image.css("left"))),o=t.originalEvent.pageX||t.originalEvent.touches[0].pageX)})).on("touchmove.ilb7 pointermove.ilb7 MSPointerMove.ilb7",(function(t){!n.hasPointers&&"pointermove"===t.type||!n.wasTouched(t.originalEvent)||e.options.quitOnImgClick||(t.preventDefault(),a=t.originalEvent.pageX||t.originalEvent.touches[0].pageX,e.swipeDiff=o-a,n.hasCssTransitionSupport?n.cssTransitionTranslateX(e.image,-1*e.swipeDiff+"px",0):e.image.css("left",s-e.swipeDiff+"px"))})).on("touchend.ilb7 touchcancel.ilb7 pointerup.ilb7 pointercancel.ilb7 MSPointerUp.ilb7 MSPointerCancel.ilb7",(function(t){n.wasTouched(t.originalEvent)&&!e.options.quitOnImgClick&&(Math.abs(e.swipeDiff)>50?e.swipeDiff<0?e._previousTarget():e._nextTarget():n.hasCssTransitionSupport?n.cssTransitionTranslateX(e.image,"0px",e.options.animationSpeed/1e3):e.image.animate({left:s+"px"},e.options.animationSpeed/2))})),!0===i&&u(),!1===i&&(e.image=e.image.on("loadedmetadata.ilb7",u)),p||(e.image=e.image.on(n.hasPointers?"pointerup.ilb7 MSPointerUp.ilb7":"click.ilb7",(function(t){if(t.preventDefault(),e.options.quitOnImgClick)e._quitImageLightbox();else if(!n.wasTouched(t.originalEvent)){var i=(t.pageX||t.originalEvent.pageX)-t.target.offsetLeft;t.target.width/2>i?e._previousTarget():e._nextTarget()}})))}),e.options.animationSpeed+100)}},t.prototype._removeImage=function(){this.image.length&&(this.image.remove(),this.image=$())},t.prototype._openImageLightbox=function(t,e){void 0===e&&(e=!1),this.inProgress||(this.inProgress=!1,this.target=t,this.targetIndex=this.targets.index(this.target),e||this._pushToHistory(),this._onStart(),r.$components.$body.append(r.$components.$wrapper).addClass("imagelightbox-open"),r.$components.$wrapper.trigger("start.ilb2",t),this._loadImage(0))},t.prototype._quitImageLightbox=function(t){void 0===t&&(t=!1);var e=this;this.targetIndex=-1,t||this._pushQuitToHistory(),r.$components.$wrapper.trigger("quit.ilb2"),r.$components.$body.removeClass("imagelightbox-open"),this.image.length&&this.image.animate({opacity:0},e.options.animationSpeed,(function(){e._removeImage(),e.inProgress=!1,r.$components.$wrapper.remove().find("*").remove()}))},t.prototype._addTargets=function(t){var e=this;t.each((function(){e.targets=t.add($(this))})),t.on("click.ilb7",{set:e.targetSet},(function(i){i.preventDefault(),e.targetSet=$(i.currentTarget).data("imagelightbox"),t.filter((function(){return $(this).data("imagelightbox")===e.targetSet})).filter((function(){return e.isTargetValid($(this))})).each((function(){e.targets=e.targets.add($(this))})),e.targets.length<1?e._quitImageLightbox():e._openImageLightbox($(this))}))},t.prototype._preloadVideos=function(t){var e=this;t.each((function(){var t=$(this).data("ilb2Video");if(t){var i=$(this).data("ilb2Id");i||(i="a"+(65536*(1+Math.random())|0).toString(16)),$(this).data("ilb2VideoId",i);var n={e:$("<video id='"+e.options.id+"' preload='metadata'>"),i:i,l:!1,a:void 0};$.each(t,(function(t,e){"autoplay"===t?n.a=e:"sources"!==t&&(n.e=n.e.attr(t,e))})),t.sources&&$.each(t.sources,(function(t,e){var i=$("<source>");$.each(e,(function(t,e){i=i.attr(t,e)})),n.e.append(i)})),n.e.on("loadedmetadata.ilb7",(function(){n.l=!0})),e.videos.push(n)}}))},t}();i.ImageLightbox=a},t.f[2]=function(t,e){Object.defineProperty(e,"__esModule",{value:!0});var i=function(){var t=(document.body||document.documentElement).style;return""===t.transition?"":""===t.webkitTransition?"-webkit-":""===t.MozTransition?"-moz-":""===t.OTransition&&"-o-"};e.hasCssTransitionSupport=!1!==i(),e.cssTransitionTranslateX=function(t,e,n){var o={},r=i();o[r+"transform"]="translateX("+e+") translateY(-50%)",o[r+"transition"]=r+"transform "+n+"s ease-in",t.css(o)},e.hasTouch="ontouchstart"in window,e.hasPointers=window.navigator.pointerEnabled||window.navigator.msPointerEnabled,e.wasTouched=function(t){if(e.hasTouch)return!0;if(!e.hasPointers||void 0===t||void 0===t.pointerType)return!1;if(void 0!==t.MSPOINTER_TYPE_MOUSE){if(t.MSPOINTER_TYPE_MOUSE!==t.pointerType)return!0}else if("mouse"!==t.pointerType)return!0;return!1},e.hasFullscreenSupport=!!(document.fullscreenEnabled||document.webkitFullscreenEnabled||document.mozFullScreenEnabled||document.msFullscreenEnabled),e.hasHistorySupport=!(!window.history||!history.pushState),e.toggleFullScreen=function(t){var e=window.document,i=document.getElementById(t).parentElement,n=i.requestFullscreen||i.mozRequestFullScreen||i.webkitRequestFullScreen||i.msRequestFullscreen,o=e.exitFullscreen||e.mozCancelFullScreen||e.webkitExitFullscreen||e.msExitFullscreen;e.fullscreenElement||e.mozFullScreenElement||e.webkitFullscreenElement||e.msFullscreenElement?o.call(e):n.call(i)}},t.f[3]=function(t,e){Object.defineProperty(e,"__esModule",{value:!0}),e.setSizes=function(t,e,i){if(e.width>t.width||e.height>t.height){var n=e.width/e.height>t.width/t.height?e.width/t.width:e.height/t.height;e.width/=n,e.height/=n}var o=e.height*e.gutterFactor,r=e.width*e.gutterFactor,a=($(window).width()-r)/2;return i.css({width:r+"px",height:o+"px",left:a+"px"}),i}},t.f[4]=function(t,e){Object.defineProperty(e,"__esModule",{value:!0});var i=$("<button/>",{type:"button",class:"imagelightbox-arrow imagelightbox-arrow-left"}),n=$("<button/>",{type:"button",class:"imagelightbox-arrow imagelightbox-arrow-right"});e.$components={$activityObject:$("<div/>").attr("class","imagelightbox-loading").append($("<div/>")),$arrows:i.add(n),$captionObject:$("<div/>",{class:"imagelightbox-caption",html:"&nbsp;"}),$buttonObject:$("<button/>",{type:"button",class:"imagelightbox-close"}),$overlayObject:$("<div/>",{class:"imagelightbox-overlay"}),$navItem:$("<a/>",{href:"#",class:"imagelightbox-navitem"}),$navObject:$("<div/>",{class:"imagelightbox-nav"}),$wrapper:$("<div/>",{class:"imagelightbox-wrapper"}),$body:$("body")}},t.f[5]=function(t,e){var i,n,o,r,a,s,c,p,l,u,h,g,d,f,m,b,v,y,x,$;!function(e){var i="object"==typeof self?self:"object"==typeof this?this:{};function n(t,e){return t!==i&&("function"==typeof Object.create?Object.defineProperty(t,"__esModule",{value:!0}):t.__esModule=!0),function(i,n){return t[i]=e?e(i,n):n}}"object"==typeof t.exports?e(n(i,n(t.exports))):e(n(i))}((function(t){var e=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var i in e)e.hasOwnProperty(i)&&(t[i]=e[i])};i=function(t,i){function n(){this.constructor=t}e(t,i),t.prototype=null===i?Object.create(i):(n.prototype=i.prototype,new n)},n=Object.assign||function(t){for(var e,i=1,n=arguments.length;i<n;i++)for(var o in e=arguments[i])Object.prototype.hasOwnProperty.call(e,o)&&(t[o]=e[o]);return t},o=function(t,e){var i={};for(var n in t)Object.prototype.hasOwnProperty.call(t,n)&&e.indexOf(n)<0&&(i[n]=t[n]);if(null!=t&&"function"==typeof Object.getOwnPropertySymbols){var o=0;for(n=Object.getOwnPropertySymbols(t);o<n.length;o++)e.indexOf(n[o])<0&&Object.prototype.propertyIsEnumerable.call(t,n[o])&&(i[n[o]]=t[n[o]])}return i},r=function(t,e,i,n){var o,r=arguments.length,a=r<3?e:null===n?n=Object.getOwnPropertyDescriptor(e,i):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(t,e,i,n);else for(var s=t.length-1;s>=0;s--)(o=t[s])&&(a=(r<3?o(a):r>3?o(e,i,a):o(e,i))||a);return r>3&&a&&Object.defineProperty(e,i,a),a},a=function(t,e){return function(i,n){e(i,n,t)}},s=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)},c=function(t,e,i,n){return new(i||(i=Promise))((function(o,r){function a(t){try{c(n.next(t))}catch(t){r(t)}}function s(t){try{c(n.throw(t))}catch(t){r(t)}}function c(t){t.done?o(t.value):new i((function(e){e(t.value)})).then(a,s)}c((n=n.apply(t,e||[])).next())}))},p=function(t,e){var i,n,o,r,a={label:0,sent:function(){if(1&o[0])throw o[1];return o[1]},trys:[],ops:[]};return r={next:s(0),throw:s(1),return:s(2)},"function"==typeof Symbol&&(r[Symbol.iterator]=function(){return this}),r;function s(r){return function(s){return function(r){if(i)throw new TypeError("Generator is already executing.");for(;a;)try{if(i=1,n&&(o=2&r[0]?n.return:r[0]?n.throw||((o=n.return)&&o.call(n),0):n.next)&&!(o=o.call(n,r[1])).done)return o;switch(n=0,o&&(r=[2&r[0],o.value]),r[0]){case 0:case 1:o=r;break;case 4:return a.label++,{value:r[1],done:!1};case 5:a.label++,n=r[1],r=[0];continue;case 7:r=a.ops.pop(),a.trys.pop();continue;default:if(!(o=(o=a.trys).length>0&&o[o.length-1])&&(6===r[0]||2===r[0])){a=0;continue}if(3===r[0]&&(!o||r[1]>o[0]&&r[1]<o[3])){a.label=r[1];break}if(6===r[0]&&a.label<o[1]){a.label=o[1],o=r;break}if(o&&a.label<o[2]){a.label=o[2],a.ops.push(r);break}o[2]&&a.ops.pop(),a.trys.pop();continue}r=e.call(t,a)}catch(t){r=[6,t],n=0}finally{i=o=0}if(5&r[0])throw r[1];return{value:r[0]?r[1]:void 0,done:!0}}([r,s])}}},l=function(t,e){for(var i in t)e.hasOwnProperty(i)||(e[i]=t[i])},u=function(t){var e="function"==typeof Symbol&&t[Symbol.iterator],i=0;return e?e.call(t):{next:function(){return t&&i>=t.length&&(t=void 0),{value:t&&t[i++],done:!t}}}},h=function(t,e){var i="function"==typeof Symbol&&t[Symbol.iterator];if(!i)return t;var n,o,r=i.call(t),a=[];try{for(;(void 0===e||e-- >0)&&!(n=r.next()).done;)a.push(n.value)}catch(t){o={error:t}}finally{try{n&&!n.done&&(i=r.return)&&i.call(r)}finally{if(o)throw o.error}}return a},g=function(){for(var t=[],e=0;e<arguments.length;e++)t=t.concat(h(arguments[e]));return t},d=function(){for(var t=0,e=0,i=arguments.length;e<i;e++)t+=arguments[e].length;var n=Array(t),o=0;for(e=0;e<i;e++)for(var r=arguments[e],a=0,s=r.length;a<s;a++,o++)n[o]=r[a];return n},f=function(t){return this instanceof f?(this.v=t,this):new f(t)},m=function(t,e,i){if(!Symbol.asyncIterator)throw new TypeError("Symbol.asyncIterator is not defined.");var n,o=i.apply(t,e||[]),r=[];return n={},a("next"),a("throw"),a("return"),n[Symbol.asyncIterator]=function(){return this},n;function a(t){o[t]&&(n[t]=function(e){return new Promise((function(i,n){r.push([t,e,i,n])>1||s(t,e)}))})}function s(t,e){try{(i=o[t](e)).value instanceof f?Promise.resolve(i.value.v).then(c,p):l(r[0][2],i)}catch(t){l(r[0][3],t)}var i}function c(t){s("next",t)}function p(t){s("throw",t)}function l(t,e){t(e),r.shift(),r.length&&s(r[0][0],r[0][1])}},b=function(t){var e,i;return e={},n("next"),n("throw",(function(t){throw t})),n("return"),e[Symbol.iterator]=function(){return this},e;function n(n,o){e[n]=t[n]?function(e){return(i=!i)?{value:f(t[n](e)),done:"return"===n}:o?o(e):e}:o}},v=function(t){if(!Symbol.asyncIterator)throw new TypeError("Symbol.asyncIterator is not defined.");var e,i=t[Symbol.asyncIterator];return i?i.call(t):(t=u(t),e={},n("next"),n("throw"),n("return"),e[Symbol.asyncIterator]=function(){return this},e);function n(i){e[i]=t[i]&&function(e){return new Promise((function(n,o){(function(t,e,i,n){Promise.resolve(n).then((function(e){t({value:e,done:i})}),e)})(n,o,(e=t[i](e)).done,e.value)}))}}},y=function(t,e){return Object.defineProperty?Object.defineProperty(t,"raw",{value:e}):t.raw=e,t},x=function(t){if(t&&t.__esModule)return t;var e={};if(null!=t)for(var i in t)Object.hasOwnProperty.call(t,i)&&(e[i]=t[i]);return e.default=t,e},$=function(t){return t&&t.__esModule?t:{default:t}},t("__extends",i),t("__assign",n),t("__rest",o),t("__decorate",r),t("__param",a),t("__metadata",s),t("__awaiter",c),t("__generator",p),t("__exportStar",l),t("__values",u),t("__read",h),t("__spread",g),t("__spreadArrays",d),t("__await",f),t("__asyncGenerator",m),t("__asyncDelegator",b),t("__asyncValues",v),t("__makeTemplateObject",y),t("__importStar",x),t("__importDefault",$)}))};window;t.r(0)}($fsx);
+(function(FuseBox){FuseBox.$fuse$=FuseBox;
+FuseBox.target = "browser";
+// allowSyntheticDefaultImports
+FuseBox.sdep = true;
+var __process_env__ = {"COMPILE_TIME":"1575148252979","PROJECT_NAME":"bookblock"};
+FuseBox.pkg("default", {}, function(___scope___){
+___scope___.file("index.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const PROJECT_NAME = 'imageLightbox';
+const imagelightbox_1 = require("./imagelightbox");
+$.fn.imageLightbox = Object.assign(function (options) {
+    // guard against double initialization
+    if ($.data(this, PROJECT_NAME) != null) {
+        return this;
+    }
+    // Here's a best practice for overriding 'defaults'
+    // with specified options. Note how, rather than a
+    // regular defaults object being passed as the second
+    // parameter, we instead refer to $.fn.pluginName.options
+    // explicitly, merging it with the options passed directly
+    // to the plugin. This allows us to override options both
+    // globally and on a per-call level.
+    //   // Merge the global options with the options given as argument.
+    const mergedOptions = Object.assign(Object.assign({}, $.fn.imageLightbox.options), options);
+    $(document).off('click', mergedOptions.selector);
+    this.each(() => {
+        $.data(this, $.fn.imageLightbox.PROJECT_NAME, new imagelightbox_1.ImageLightbox(mergedOptions, this));
+    });
+    return this;
+}, {
+    PROJECT_NAME,
+    options: {
+        selector: 'a[data-imagelightbox]',
+        id: 'imagelightbox',
+        allowedTypes: 'png|jpg|jpeg|gif',
+        animationSpeed: 250,
+        activity: false,
+        arrows: false,
+        button: false,
+        caption: false,
+        enableKeyboard: true,
+        history: false,
+        fullscreen: false,
+        gutter: 10,
+        offsetY: 0,
+        navigation: false,
+        overlay: false,
+        preloadNext: true,
+        quitOnEnd: false,
+        quitOnImgClick: false,
+        quitOnDocClick: true,
+        quitOnEscKey: true,
+    },
+});
+
+});
+___scope___.file("imagelightbox.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+// http://blog.npmjs.org/post/112712169830/making-your-jquery-plugin-work-better-with-npm
+// If there is a variable named module and it has an exports property,
+// then we're working in a Node-like environment. Use require to load
+// the jQuery object that the module system is using and pass it in.
+// Otherwise, we're working in a browser, so just pass in the global
+// jQuery object.
+Object.defineProperty(exports, "__esModule", { value: true });
+const imagelightbox_support_1 = require("./imagelightbox.support");
+const imagelightbox_transforms_1 = require("./imagelightbox.transforms");
+const imagelightbox_components_1 = require("./imagelightbox.components");
+class ImageLightbox {
+    constructor(options, elementT) {
+        this.currentIndex = 0;
+        this.inProgress = false;
+        this.swipeDiff = 0;
+        this.target = $();
+        this.targetIndex = -1;
+        this.targets = $([]);
+        this.targetSet = '';
+        this.videos = [];
+        this.PROJECT_NAME = 'imageLightbox';
+        const self = this;
+        this.image = $(elementT);
+        this.options = options;
+        const captionHeight = options.caption ? imagelightbox_components_1.$components.$captionObject.outerHeight() : 0;
+        const screenWidth = $(window).width();
+        const screenHeight = $(window).height() - captionHeight;
+        const gutterFactor = Math.abs(1 - options.gutter / 100);
+        const videoElement = this.image.get(0);
+        if (videoElement.videoWidth !== undefined) {
+            //            setSizes({width:screenWidth, height:screenHeight}, {width:videoElement.videoWidth, height:videoElement.videoHeight});
+            return;
+        }
+        const tmpImage = new Image();
+        tmpImage.src = self.image.attr('src');
+        tmpImage.onload = function () {
+            // tmpImage.width, imageHeight: tmpImage.height
+            self.image = imagelightbox_transforms_1.setSizes({ width: screenWidth, height: screenHeight }, { width: tmpImage.width, height: tmpImage.height, gutterFactor }, $(elementT));
+        };
+        $(window).on('resize.ilb7', this._setImage);
+        if (imagelightbox_support_1.hasHistorySupport && options.history) {
+            $(window).on('popstate', this._popHistory);
+        }
+        $(document).ready(() => {
+            if (options.quitOnDocClick) {
+                $(document).on(imagelightbox_support_1.hasTouch ? 'touchend.ilb7' : 'click.ilb7', function (e) {
+                    if (self.image.length && !$(e.target).is(self.image)) {
+                        e.preventDefault();
+                        self._quitImageLightbox();
+                    }
+                });
+            }
+            if (options.fullscreen && imagelightbox_support_1.hasFullscreenSupport) {
+                $(document).on('keydown.ilb7', function (e) {
+                    if (!self.image.length) {
+                        return;
+                    }
+                    if ([9, 32, 38, 40].includes(e.which)) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }
+                    if ([13].includes(e.which)) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        imagelightbox_support_1.toggleFullScreen(options.id);
+                    }
+                });
+            }
+            if (options.enableKeyboard) {
+                $(document).on('keydown.ilb7', (e) => {
+                    if (!self.image.length) {
+                        return;
+                    }
+                    if ([27].includes(e.which) && options.quitOnEscKey) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        self._quitImageLightbox();
+                    }
+                    if ([37].includes(e.which)) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        self._previousTarget();
+                    }
+                    if ([39].includes(e.which)) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        self._nextTarget();
+                    }
+                });
+            }
+        });
+        this._addTargets($());
+        this._openHistory();
+        this._preloadVideos(this.targets);
+    }
+    _onStart() {
+        if (this.options.arrows) {
+            this.arrowsOn();
+        }
+        if (this.options.navigation) {
+            this.navigationOn();
+        }
+        if (this.options.overlay) {
+            this.overlayOn();
+        }
+        if (this.options.button) {
+            this.closeButtonOn();
+        }
+        if (this.options.caption) {
+            imagelightbox_components_1.$components.$wrapper.append(imagelightbox_components_1.$components.$captionObject);
+        }
+    }
+    _onLoadStart() {
+        if (this.options.activity) {
+            this.activityIndicatorOn();
+        }
+        if (this.options.caption) {
+            this.captionReset();
+        }
+    }
+    _onLoadEnd() {
+        if (this.options.activity) {
+            this.activityIndicatorOff();
+        }
+        if (this.options.arrows) {
+            imagelightbox_components_1.$components.$arrows.css('display', 'block');
+        }
+    }
+    _addQueryField(query, key, value) {
+        const newField = key + '=' + value;
+        let newQuery = '?' + newField;
+        if (query) {
+            const keyRegex = new RegExp('([?&])' + key + '=[^&]*');
+            if (keyRegex.exec(query) !== null) {
+                newQuery = query.replace(keyRegex, '$1' + newField);
+            }
+            else {
+                newQuery = query + '&' + newField;
+            }
+        }
+        return newQuery;
+    }
+    _pushToHistory() {
+        if (!imagelightbox_support_1.hasHistorySupport || !this.options.history) {
+            return;
+        }
+        let newIndex = this.targets[this.targetIndex].dataset.ilb2Id;
+        if (!newIndex) {
+            newIndex = this.targetIndex.toString();
+        }
+        const newState = { imageLightboxIndex: newIndex, imageLightboxSet: '' };
+        const set = this.targets[this.targetIndex].dataset.imagelightbox;
+        if (set) {
+            newState.imageLightboxSet = set;
+        }
+        let newQuery = this._addQueryField(document.location.search, 'imageLightboxIndex', newIndex);
+        if (set) {
+            newQuery = this._addQueryField(newQuery, 'imageLightboxSet', set);
+        }
+        window.history.pushState(newState, '', document.location.pathname + newQuery);
+    }
+    _removeQueryField(query, key) {
+        let newQuery = query;
+        if (newQuery) {
+            const keyRegex1 = new RegExp('\\?' + key + '=[^&]*');
+            const keyRegex2 = new RegExp('&' + key + '=[^&]*');
+            newQuery = newQuery.replace(keyRegex1, '?');
+            newQuery = newQuery.replace(keyRegex2, '');
+        }
+        return newQuery;
+    }
+    _pushQuitToHistory() {
+        if (!imagelightbox_support_1.hasHistorySupport || !this.options.history) {
+            return;
+        }
+        let newQuery = this._removeQueryField(document.location.search, 'imageLightboxIndex');
+        newQuery = this._removeQueryField(newQuery, 'imageLightboxSet');
+        window.history.pushState({}, '', document.location.pathname + newQuery);
+    }
+    _getQueryField(key) {
+        const keyValuePair = new RegExp('[?&]' + key + '(=([^&#]*)|&|#|$)').exec(document.location.search);
+        if (!keyValuePair || !keyValuePair[2]) {
+            return undefined;
+        }
+        return decodeURIComponent(keyValuePair[2].replace(/\+/g, ' '));
+    }
+    _openHistory() {
+        if (!imagelightbox_support_1.hasHistorySupport || !this.options.history) {
+            return;
+        }
+        const id = this._getQueryField('imageLightboxIndex');
+        if (!id) {
+            return;
+        }
+        let element = this.targets.filter('[data-ilb2-id="' + id + '"]');
+        if (element.length > 0) {
+            this.targetIndex = this.targets.index(element);
+        }
+        else {
+            this.targetIndex = parseInt(id);
+            element = $(this.targets[this.targetIndex]);
+        }
+        const set = this._getQueryField('imageLightboxSet');
+        if (!element[0] || (!!set && set !== element[0].dataset.imagelightbox)) {
+            return;
+        }
+        this._openImageLightbox(element, true);
+    }
+    _popHistory(event) {
+        const newState = event.originalEvent.state;
+        if (!newState) {
+            this._quitImageLightbox(true);
+            return;
+        }
+        const newId = newState.imageLightboxIndex;
+        if (newId === undefined) {
+            this._quitImageLightbox(true);
+            return;
+        }
+        let element = this.targets.filter('[data-ilb2-id="' + newId + '"]');
+        let newIndex = newId;
+        if (element.length > 0) {
+            newIndex = this.targets.index(element);
+        }
+        else {
+            element = $(this.targets[newIndex]);
+        }
+        if (!element[0] || (newState.imageLightboxSet && newState.imageLightboxSet !== element[0].dataset.imagelightbox)) {
+            return;
+        }
+        if (this.targetIndex < 0) {
+            this._openImageLightbox(element, true);
+            return;
+        }
+        let direction = +1;
+        if (newIndex > this.targetIndex) {
+            direction = -1;
+        }
+        this.target = element;
+        this.targetIndex = newIndex;
+        this._loadImage(direction);
+    }
+    _nextTarget() {
+        this.targetIndex++;
+        if (this.targetIndex >= this.targets.length) {
+            if (this.options.quitOnEnd === true) {
+                this._quitImageLightbox();
+                return;
+            }
+            else {
+                this.targetIndex = 0;
+            }
+        }
+        this._pushToHistory();
+        this.target = this.targets.eq(this.targetIndex);
+        imagelightbox_components_1.$components.$wrapper.trigger('next.ilb2', this.target);
+        this._loadImage(-1);
+    }
+    activityIndicatorOn() {
+        imagelightbox_components_1.$components.$wrapper.append(imagelightbox_components_1.$components.$activityObject);
+    }
+    activityIndicatorOff() {
+        $('.imagelightbox-loading').remove();
+    }
+    overlayOn() {
+        imagelightbox_components_1.$components.$wrapper.append(imagelightbox_components_1.$components.$overlayObject);
+    }
+    closeButtonOn() {
+        const self = this;
+        imagelightbox_components_1.$components.$buttonObject.appendTo(imagelightbox_components_1.$components.$wrapper).on('click.ilb7', function () {
+            self._quitImageLightbox();
+        });
+    }
+    captionReset() {
+        imagelightbox_components_1.$components.$captionObject.css('opacity', '0');
+        imagelightbox_components_1.$components.$captionObject.html('&nbsp;');
+        if ($(this.target).data('ilb2-caption')) {
+            imagelightbox_components_1.$components.$captionObject.css('opacity', '1');
+            imagelightbox_components_1.$components.$captionObject.html($(this.target).data('ilb2-caption'));
+        }
+        else if ($(this.target).find('img').attr('alt')) {
+            imagelightbox_components_1.$components.$captionObject.css('opacity', '1');
+            imagelightbox_components_1.$components.$captionObject.html($(this.target).find('img').attr('alt'));
+        }
+    }
+    navigationOn() {
+        const self = this;
+        if (!this.targets.length) {
+            return;
+        }
+        for (let i = 0; i < this.targets.length; i++) {
+            imagelightbox_components_1.$components.$navObject.append(imagelightbox_components_1.$components.$navItem.clone());
+        }
+        const $navItems = imagelightbox_components_1.$components.$navObject.children('a');
+        $navItems.eq(this.targets.index(this.target)).addClass('active');
+        imagelightbox_components_1.$components.$wrapper.on('previous.ilb2 next.ilb2', function () {
+            $navItems.removeClass('active').eq(self.targets.index(self.target)).addClass('active');
+        });
+        imagelightbox_components_1.$components.$wrapper.append(imagelightbox_components_1.$components.$navObject);
+        imagelightbox_components_1.$components.$navObject
+            .on('click.ilb7 touchend.ilb7', function () {
+            return false;
+        })
+            .on('click.ilb7 touchend.ilb7', 'a', function () {
+            const $this = $(this);
+            if (this.targets.eq($this.index()).attr('href') !== $('.imagelightbox').attr('src')) {
+                const tmpTarget = this.targets.eq($this.index());
+                if (tmpTarget.length) {
+                    this.currentIndex = this.targets.index(this.target);
+                    this.target = tmpTarget;
+                    this._loadImage($this.index() < this.currentIndex ? -1 : 1);
+                }
+            }
+            $this.addClass('active').siblings().removeClass('active');
+        });
+    }
+    arrowsOn() {
+        const self = this;
+        imagelightbox_components_1.$components.$wrapper.append(imagelightbox_components_1.$components.$arrows);
+        imagelightbox_components_1.$components.$arrows.on('click.ilb7 touchend.ilb7', function (e) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            if ($(this).hasClass('imagelightbox-arrow-left')) {
+                self._previousTarget();
+            }
+            else {
+                self._nextTarget();
+            }
+        });
+    }
+    isTargetValid(element) {
+        // eslint-disable-next-line
+        return $(element).prop('tagName').toLowerCase() === 'a' && ((new RegExp('\.(' + this.options.allowedTypes + ')$', 'i')).test($(element).attr('href')) || $(element).data('ilb2Video'));
+    }
+    _setImage() {
+        if (!this.image.length) {
+            return;
+        }
+    }
+    _previousTarget() {
+        this.targetIndex--;
+        if (this.targetIndex < 0) {
+            if (this.options.quitOnEnd === true) {
+                this._quitImageLightbox();
+                return;
+            }
+            else {
+                this.targetIndex = this.targets.length - 1;
+            }
+        }
+        this.target = this.targets.eq(this.targetIndex);
+        this._pushToHistory();
+        imagelightbox_components_1.$components.$wrapper.trigger('previous.ilb2', this.target);
+        this._loadImage(+1);
+    }
+    addToImageLightbox(elements) {
+        this._addTargets(elements);
+        this._preloadVideos(elements);
+    }
+    openHistory() {
+        this._openHistory();
+    }
+    loadPreviousImage() {
+        this._previousTarget();
+    }
+    loadNextImage() {
+        this._nextTarget();
+    }
+    quitImageLightbox() {
+        this._quitImageLightbox();
+    }
+    startImageLightbox(element) {
+        if (element) {
+            element.trigger('click.ilb7');
+        }
+        else {
+            $(this).trigger('click.ilb7');
+        }
+    }
+    _loadImage(direction) {
+        const self = this;
+        if (this.inProgress) {
+            return;
+        }
+        if (this.image.length) {
+            const params = { 'opacity': 0, 'left': '' };
+            if (imagelightbox_support_1.hasCssTransitionSupport) {
+                imagelightbox_support_1.cssTransitionTranslateX(this.image, (100 * direction) - this.swipeDiff + 'px', self.options.animationSpeed / 1000);
+            }
+            else {
+                params.left = parseInt(self.image.css('left')) + (100 * direction) + 'px';
+            }
+            this.image.animate(params, self.options.animationSpeed, function () {
+                self._removeImage();
+            });
+            this.swipeDiff = 0;
+        }
+        this.inProgress = true;
+        this._onLoadStart();
+        setTimeout(function () {
+            let swipeStart = 0;
+            let swipeEnd = 0;
+            let imagePosLeft = 0;
+            const imgPath = self.target.attr('href');
+            // if (imgPath === undefined) {
+            //     imgPath = target.attr('data-lightbox');
+            // }
+            const videoOptions = self.target.data('ilb2Video');
+            let element = $();
+            let preloadedVideo;
+            if (videoOptions) {
+                $.each(self.videos, function (_, video) {
+                    if (video.i === self.target.data('ilb2VideoId')) {
+                        preloadedVideo = video.l;
+                        element = video.e;
+                        if (video.a) {
+                            if (preloadedVideo === false) {
+                                element.attr('autoplay', video.a);
+                            }
+                            if (preloadedVideo === true) {
+                                element.get(0).play();
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                element = $('<img id=\'' + self.options.id + '\' />')
+                    .attr('src', imgPath);
+            }
+            function onload() {
+                const params = { 'opacity': 1, 'left': '' };
+                self.image.appendTo(imagelightbox_components_1.$components.$wrapper);
+                self._setImage();
+                self.image.css('opacity', 0);
+                if (imagelightbox_support_1.hasCssTransitionSupport) {
+                    imagelightbox_support_1.cssTransitionTranslateX(self.image, -100 * direction + 'px', 0);
+                    setTimeout(function () {
+                        imagelightbox_support_1.cssTransitionTranslateX(self.image, 0 + 'px', self.options.animationSpeed / 1000);
+                    }, 50);
+                }
+                else {
+                    imagePosLeft = parseInt(self.image.css('left'));
+                    params.left = imagePosLeft + 'px';
+                    self.image.css('left', imagePosLeft - 100 * direction + 'px');
+                }
+                self.image.animate(params, self.options.animationSpeed, function () {
+                    self.inProgress = false;
+                    self._onLoadEnd();
+                });
+                if (self.options.preloadNext) {
+                    let nextTarget = self.targets.eq(self.targets.index(self.target) + 1);
+                    if (!nextTarget.length) {
+                        nextTarget = self.targets.eq(0);
+                    }
+                    $('<img />').attr('src', nextTarget.attr('href'));
+                }
+                imagelightbox_components_1.$components.$wrapper.trigger('loaded.ilb2');
+            }
+            function onclick(e) {
+                e.preventDefault();
+                if (self.options.quitOnImgClick) {
+                    self._quitImageLightbox();
+                    return;
+                }
+                if (imagelightbox_support_1.wasTouched(e.originalEvent)) {
+                    return;
+                }
+                const posX = (e.pageX || e.originalEvent.pageX) - e.target.offsetLeft;
+                if (e.target.width / 2 > posX) {
+                    self._previousTarget();
+                }
+                else {
+                    self._nextTarget();
+                }
+            }
+            self.image = element
+                .on('load.ilb7', onload)
+                .on('error.ilb7', function () {
+                self._onLoadEnd();
+            })
+                .on('touchstart.ilb7 pointerdown.ilb7 MSPointerDown.ilb7', function (e) {
+                if (!imagelightbox_support_1.wasTouched(e.originalEvent) || self.options.quitOnImgClick) {
+                    return;
+                }
+                if (imagelightbox_support_1.hasCssTransitionSupport) {
+                    imagePosLeft = parseInt(self.image.css('left'));
+                }
+                swipeStart = e.originalEvent.pageX || e.originalEvent.touches[0].pageX;
+            })
+                .on('touchmove.ilb7 pointermove.ilb7 MSPointerMove.ilb7', function (e) {
+                if ((!imagelightbox_support_1.hasPointers && e.type === 'pointermove') || !imagelightbox_support_1.wasTouched(e.originalEvent) || self.options.quitOnImgClick) {
+                    return;
+                }
+                e.preventDefault();
+                swipeEnd = e.originalEvent.pageX || e.originalEvent.touches[0].pageX;
+                self.swipeDiff = swipeStart - swipeEnd;
+                if (imagelightbox_support_1.hasCssTransitionSupport) {
+                    imagelightbox_support_1.cssTransitionTranslateX(self.image, -1 * self.swipeDiff + 'px', 0);
+                }
+                else {
+                    self.image.css('left', imagePosLeft - self.swipeDiff + 'px');
+                }
+            })
+                .on('touchend.ilb7 touchcancel.ilb7 pointerup.ilb7 pointercancel.ilb7 MSPointerUp.ilb7 MSPointerCancel.ilb7', function (e) {
+                if (!imagelightbox_support_1.wasTouched(e.originalEvent) || self.options.quitOnImgClick) {
+                    return;
+                }
+                if (Math.abs(self.swipeDiff) > 50) {
+                    if (self.swipeDiff < 0) {
+                        self._previousTarget();
+                    }
+                    else {
+                        self._nextTarget();
+                    }
+                }
+                else {
+                    if (imagelightbox_support_1.hasCssTransitionSupport) {
+                        imagelightbox_support_1.cssTransitionTranslateX(self.image, 0 + 'px', self.options.animationSpeed / 1000);
+                    }
+                    else {
+                        self.image.animate({ 'left': imagePosLeft + 'px' }, self.options.animationSpeed / 2);
+                    }
+                }
+            });
+            if (preloadedVideo === true) {
+                onload();
+            }
+            if (preloadedVideo === false) {
+                self.image = self.image.on('loadedmetadata.ilb7', onload);
+            }
+            if (!videoOptions) {
+                self.image = self.image.on(imagelightbox_support_1.hasPointers ? 'pointerup.ilb7 MSPointerUp.ilb7' : 'click.ilb7', onclick);
+            }
+        }, self.options.animationSpeed + 100);
+    }
+    _removeImage() {
+        if (!this.image.length) {
+            return;
+        }
+        this.image.remove();
+        this.image = $();
+    }
+    _openImageLightbox($target, noHistory = false) {
+        if (this.inProgress) {
+            return;
+        }
+        this.inProgress = false;
+        this.target = $target;
+        this.targetIndex = this.targets.index(this.target);
+        if (!noHistory) {
+            this._pushToHistory();
+        }
+        this._onStart();
+        imagelightbox_components_1.$components.$body.append(imagelightbox_components_1.$components.$wrapper)
+            .addClass('imagelightbox-open');
+        imagelightbox_components_1.$components.$wrapper.trigger('start.ilb2', $target);
+        this._loadImage(0);
+    }
+    _quitImageLightbox(noHistory = false) {
+        const self = this;
+        this.targetIndex = -1;
+        if (!noHistory) {
+            this._pushQuitToHistory();
+        }
+        imagelightbox_components_1.$components.$wrapper.trigger('quit.ilb2');
+        imagelightbox_components_1.$components.$body.removeClass('imagelightbox-open');
+        if (!this.image.length) {
+            return;
+        }
+        this.image.animate({ 'opacity': 0 }, self.options.animationSpeed, function () {
+            self._removeImage();
+            self.inProgress = false;
+            imagelightbox_components_1.$components.$wrapper.remove().find('*').remove();
+        });
+    }
+    _addTargets(newTargets) {
+        const self = this;
+        newTargets.each(function () {
+            self.targets = newTargets.add($(this));
+        });
+        newTargets.on('click.ilb7', { set: self.targetSet }, function (e) {
+            e.preventDefault();
+            self.targetSet = $(e.currentTarget).data('imagelightbox');
+            filterTargets();
+            if (self.targets.length < 1) {
+                self._quitImageLightbox();
+            }
+            else {
+                self._openImageLightbox($(this));
+            }
+        });
+        function filterTargets() {
+            newTargets
+                .filter(function () {
+                return $(this).data('imagelightbox') === self.targetSet;
+            })
+                .filter(function () {
+                return self.isTargetValid($(this));
+            })
+                .each(function () {
+                self.targets = self.targets.add($(this));
+            });
+        }
+    }
+    _preloadVideos(elements) {
+        const self = this;
+        elements.each(function () {
+            const videoOptions = $(this).data('ilb2Video');
+            if (videoOptions) {
+                let id = $(this).data('ilb2Id');
+                if (!id) {
+                    id = 'a' + (((1 + Math.random()) * 0x10000) | 0).toString(16); // Random id
+                }
+                $(this).data('ilb2VideoId', id);
+                const container = { e: $('<video id=\'' + self.options.id + '\' preload=\'metadata\'>'), i: id, l: false, a: undefined };
+                $.each(videoOptions, function (key, value) {
+                    if (key === 'autoplay') {
+                        container.a = value;
+                    }
+                    else if (key !== 'sources') {
+                        container.e = container.e.attr(key, value);
+                    }
+                });
+                if (videoOptions.sources) {
+                    $.each(videoOptions.sources, function (_, source) {
+                        let sourceElement = $('<source>');
+                        $.each(source, function (key, value) {
+                            sourceElement = sourceElement.attr(key, value);
+                        });
+                        container.e.append(sourceElement);
+                    });
+                }
+                container.e.on('loadedmetadata.ilb7', function () {
+                    container.l = true;
+                });
+                self.videos.push(container);
+            }
+        });
+    }
+}
+exports.ImageLightbox = ImageLightbox;
+
+});
+___scope___.file("imagelightbox.support.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const cssTransitionSupport = function () {
+    const s = (document.body || document.documentElement).style;
+    if (s.transition === '') {
+        return '';
+    }
+    if (s.webkitTransition === '') {
+        return '-webkit-';
+    }
+    if (s.MozTransition === '') {
+        return '-moz-';
+    }
+    if (s.OTransition === '') {
+        return '-o-';
+    }
+    return false;
+};
+exports.hasCssTransitionSupport = cssTransitionSupport() !== false;
+exports.cssTransitionTranslateX = function (element, positionX, speed) {
+    const options = {}, prefix = cssTransitionSupport();
+    options[prefix + 'transform'] = 'translateX(' + positionX + ') translateY(-50%)';
+    options[prefix + 'transition'] = prefix + 'transform ' + speed + 's ease-in';
+    element.css(options);
+};
+exports.hasTouch = ('ontouchstart' in window);
+exports.hasPointers = window.navigator.pointerEnabled || window.navigator.msPointerEnabled;
+exports.wasTouched = function (event) {
+    if (exports.hasTouch) {
+        return true;
+    }
+    if (!exports.hasPointers || typeof event === 'undefined' || typeof event.pointerType === 'undefined') {
+        return false;
+    }
+    if (typeof event.MSPOINTER_TYPE_MOUSE !== 'undefined') {
+        if (event.MSPOINTER_TYPE_MOUSE !== event.pointerType) {
+            return true;
+        }
+    }
+    else if (event.pointerType !== 'mouse') {
+        return true;
+    }
+    return false;
+};
+exports.hasFullscreenSupport = !!(document.fullscreenEnabled ||
+    document.webkitFullscreenEnabled ||
+    document.mozFullScreenEnabled ||
+    document.msFullscreenEnabled);
+exports.hasHistorySupport = !!(window.history && history.pushState);
+function toggleFullScreen(target) {
+    const doc = window.document;
+    const docEl = document.getElementById(target).parentElement;
+    const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    const exitFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        requestFullScreen.call(docEl);
+    }
+    else {
+        exitFullScreen.call(doc);
+    }
+}
+exports.toggleFullScreen = toggleFullScreen;
+
+});
+___scope___.file("imagelightbox.transforms.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+function setSizes(screenXY, imageXY, image) {
+    if (imageXY.width > screenXY.width || imageXY.height > screenXY.height) {
+        const ratio = imageXY.width / imageXY.height > screenXY.width / screenXY.height ? imageXY.width / screenXY.width : imageXY.height / screenXY.height;
+        imageXY.width /= ratio;
+        imageXY.height /= ratio;
+    }
+    const cssHeight = imageXY.height * imageXY.gutterFactor;
+    const cssWidth = imageXY.width * imageXY.gutterFactor;
+    const cssLeft = ($(window).width() - cssWidth) / 2;
+    image.css({
+        'width': cssWidth + 'px',
+        'height': cssHeight + 'px',
+        'left': cssLeft + 'px'
+    });
+    return image;
+}
+exports.setSizes = setSizes;
+
+});
+___scope___.file("imagelightbox.components.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const $arrowLeftObject = $('<button/>', {
+    type: 'button',
+    class: 'imagelightbox-arrow imagelightbox-arrow-left'
+});
+const $arrowRightObject = $('<button/>', {
+    type: 'button',
+    class: 'imagelightbox-arrow imagelightbox-arrow-right'
+});
+exports.$components = {
+    $activityObject: $('<div/>')
+        .attr('class', 'imagelightbox-loading')
+        .append($('<div/>')),
+    $arrows: $arrowLeftObject.add($arrowRightObject),
+    $captionObject: $('<div/>', {
+        class: 'imagelightbox-caption',
+        html: '&nbsp;',
+    }),
+    $buttonObject: $('<button/>', {
+        type: 'button',
+        class: 'imagelightbox-close'
+    }),
+    $overlayObject: $('<div/>', {
+        class: 'imagelightbox-overlay'
+    }),
+    $navItem: $('<a/>', {
+        href: '#',
+        class: 'imagelightbox-navitem'
+    }),
+    $navObject: $('<div/>', {
+        class: 'imagelightbox-nav'
+    }),
+    $wrapper: $('<div/>', {
+        class: 'imagelightbox-wrapper'
+    }),
+    $body: $('body')
+};
+
+});
+return ___scope___.entry = "index.js";
+});
+FuseBox.pkg("events", {}, function(___scope___){
+___scope___.file("index.js", function(exports, require, module, __filename, __dirname){
+
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+if (FuseBox.isServer) {
+	module.exports = global.require("events");
+} else {
+	function EventEmitter() {
+		this._events = this._events || {};
+		this._maxListeners = this._maxListeners || undefined;
+	}
+	module.exports = EventEmitter;
+
+	// Backwards-compat with node 0.10.x
+	EventEmitter.EventEmitter = EventEmitter;
+
+	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
+
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
+
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function(n) {
+		if (!isNumber(n) || n < 0 || isNaN(n)) throw TypeError("n must be a positive number");
+		this._maxListeners = n;
+		return this;
+	};
+
+	EventEmitter.prototype.emit = function(type) {
+		var er, handler, len, args, i, listeners;
+
+		if (!this._events) this._events = {};
+
+		// If there is no 'error' event listener then throw.
+		if (type === "error") {
+			if (!this._events.error || (isObject(this._events.error) && !this._events.error.length)) {
+				er = arguments[1];
+				if (er instanceof Error) {
+					throw er; // Unhandled 'error' event
+				}
+				throw TypeError('Uncaught, unspecified "error" event.');
+			}
+		}
+
+		handler = this._events[type];
+
+		if (isUndefined(handler)) return false;
+
+		if (isFunction(handler)) {
+			switch (arguments.length) {
+				// fast cases
+				case 1:
+					handler.call(this);
+					break;
+				case 2:
+					handler.call(this, arguments[1]);
+					break;
+				case 3:
+					handler.call(this, arguments[1], arguments[2]);
+					break;
+				// slower
+				default:
+					args = Array.prototype.slice.call(arguments, 1);
+					handler.apply(this, args);
+			}
+		} else if (isObject(handler)) {
+			args = Array.prototype.slice.call(arguments, 1);
+			listeners = handler.slice();
+			len = listeners.length;
+			for (i = 0; i < len; i++) listeners[i].apply(this, args);
+		}
+
+		return true;
+	};
+
+	EventEmitter.prototype.addListener = function(type, listener) {
+		var m;
+
+		if (!isFunction(listener)) throw TypeError("listener must be a function");
+
+		if (!this._events) this._events = {};
+
+		// To avoid recursion in the case that type === "newListener"! Before
+		// adding it to the listeners, first emit "newListener".
+		if (this._events.newListener) this.emit("newListener", type, isFunction(listener.listener) ? listener.listener : listener);
+
+		if (!this._events[type])
+			// Optimize the case of one listener. Don't need the extra array object.
+			this._events[type] = listener;
+		else if (isObject(this._events[type]))
+			// If we've already got an array, just append.
+			this._events[type].push(listener);
+		// Adding the second element, need to change to array.
+		else this._events[type] = [this._events[type], listener];
+
+		// Check for listener leak
+		if (isObject(this._events[type]) && !this._events[type].warned) {
+			if (!isUndefined(this._maxListeners)) {
+				m = this._maxListeners;
+			} else {
+				m = EventEmitter.defaultMaxListeners;
+			}
+
+			if (m && m > 0 && this._events[type].length > m) {
+				this._events[type].warned = true;
+				console.error(
+					"(node) warning: possible EventEmitter memory " + "leak detected. %d listeners added. " + "Use emitter.setMaxListeners() to increase limit.",
+					this._events[type].length
+				);
+				if (typeof console.trace === "function") {
+					// not supported in IE 10
+					console.trace();
+				}
+			}
+		}
+
+		return this;
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.once = function(type, listener) {
+		if (!isFunction(listener)) throw TypeError("listener must be a function");
+
+		var fired = false;
+
+		function g() {
+			this.removeListener(type, g);
+
+			if (!fired) {
+				fired = true;
+				listener.apply(this, arguments);
+			}
+		}
+
+		g.listener = listener;
+		this.on(type, g);
+
+		return this;
+	};
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener = function(type, listener) {
+		var list, position, length, i;
+
+		if (!isFunction(listener)) throw TypeError("listener must be a function");
+
+		if (!this._events || !this._events[type]) return this;
+
+		list = this._events[type];
+		length = list.length;
+		position = -1;
+
+		if (list === listener || (isFunction(list.listener) && list.listener === listener)) {
+			delete this._events[type];
+			if (this._events.removeListener) this.emit("removeListener", type, listener);
+		} else if (isObject(list)) {
+			for (i = length; i-- > 0; ) {
+				if (list[i] === listener || (list[i].listener && list[i].listener === listener)) {
+					position = i;
+					break;
+				}
+			}
+
+			if (position < 0) return this;
+
+			if (list.length === 1) {
+				list.length = 0;
+				delete this._events[type];
+			} else {
+				list.splice(position, 1);
+			}
+
+			if (this._events.removeListener) this.emit("removeListener", type, listener);
+		}
+
+		return this;
+	};
+
+	EventEmitter.prototype.removeAllListeners = function(type) {
+		var key, listeners;
+
+		if (!this._events) return this;
+
+		// not listening for removeListener, no need to emit
+		if (!this._events.removeListener) {
+			if (arguments.length === 0) this._events = {};
+			else if (this._events[type]) delete this._events[type];
+			return this;
+		}
+
+		// emit removeListener for all listeners on all events
+		if (arguments.length === 0) {
+			for (key in this._events) {
+				if (key === "removeListener") continue;
+				this.removeAllListeners(key);
+			}
+			this.removeAllListeners("removeListener");
+			this._events = {};
+			return this;
+		}
+
+		listeners = this._events[type];
+
+		if (isFunction(listeners)) {
+			this.removeListener(type, listeners);
+		} else if (listeners) {
+			// LIFO order
+			while (listeners.length) this.removeListener(type, listeners[listeners.length - 1]);
+		}
+		delete this._events[type];
+
+		return this;
+	};
+
+	EventEmitter.prototype.listeners = function(type) {
+		var ret;
+		if (!this._events || !this._events[type]) ret = [];
+		else if (isFunction(this._events[type])) ret = [this._events[type]];
+		else ret = this._events[type].slice();
+		return ret;
+	};
+
+	EventEmitter.prototype.listenerCount = function(type) {
+		if (this._events) {
+			var evlistener = this._events[type];
+
+			if (isFunction(evlistener)) return 1;
+			else if (evlistener) return evlistener.length;
+		}
+		return 0;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+		return emitter.listenerCount(type);
+	};
+
+	function isFunction(arg) {
+		return typeof arg === "function";
+	}
+
+	function isNumber(arg) {
+		return typeof arg === "number";
+	}
+
+	function isObject(arg) {
+		return typeof arg === "object" && arg !== null;
+	}
+
+	function isUndefined(arg) {
+		return arg === void 0;
+	}
+}
+
+});
+return ___scope___.entry = "index.js";
+});
+FuseBox.pkg("fusebox-hot-reload", {}, function(___scope___){
+___scope___.file("index.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+/**
+ * @module listens to `source-changed` socket events and actions hot reload
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+var Client = require("fusebox-websocket").SocketClient, bundleErrors = {}, outputElement = document.createElement("div"), styleElement = document.createElement("style"), minimizeToggleId = "fuse-box-toggle-minimized", hideButtonId = "fuse-box-hide", expandedOutputClass = "fuse-box-expanded-output", localStoragePrefix = "__fuse-box_";
+function storeSetting(key, value) {
+    localStorage[localStoragePrefix + key] = value;
+}
+function getSetting(key) {
+    return localStorage[localStoragePrefix + key] === "true" ? true : false;
+}
+var outputInBody = false, outputMinimized = getSetting(minimizeToggleId), outputHidden = false;
+outputElement.id = "fuse-box-output";
+styleElement.innerHTML = "\n    #" + outputElement.id + ", #" + outputElement.id + " * {\n        box-sizing: border-box;\n    }\n    #" + outputElement.id + " {\n        z-index: 999999999999;\n        position: fixed;\n        top: 10px;\n        right: 10px;\n        width: 400px;\n        overflow: auto;\n        background: #fdf3f1;\n        border: 1px solid #eca494;\n        border-radius: 5px;\n        font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n        box-shadow: 0px 3px 6px 1px rgba(0,0,0,.15);\n    }\n    #" + outputElement.id + "." + expandedOutputClass + " {\n        height: auto;\n        width: auto;\n        left: 10px;\n        max-height: calc(100vh - 50px);\n    }\n    #" + outputElement.id + " .fuse-box-errors {\n        display: none;\n    }\n    #" + outputElement.id + "." + expandedOutputClass + " .fuse-box-errors {\n        display: block;\n        border-top: 1px solid #eca494;\n        padding: 0 10px;\n    }\n    #" + outputElement.id + " button {\n        border: 1px solid #eca494;\n        padding: 5px 10px;\n        border-radius: 4px;\n        margin-left: 5px;\n        background-color: white;\n        color: black;\n        box-shadow: 0px 2px 2px 0px rgba(0,0,0,.05);\n    }\n    #" + outputElement.id + " .fuse-box-header {\n        padding: 10px;\n    }\n    #" + outputElement.id + " .fuse-box-header h4 {\n        display: inline-block;\n        margin: 4px;\n    }";
+styleElement.type = "text/css";
+document.getElementsByTagName("head")[0].appendChild(styleElement);
+function displayBundleErrors() {
+    var errorMessages = Object.keys(bundleErrors).reduce(function (allMessages, bundleName) {
+        var bundleMessages = bundleErrors[bundleName];
+        return allMessages.concat(bundleMessages.map(function (message) {
+            var messageOutput = message
+                .replace(/\n/g, "<br>")
+                .replace(/\t/g, "&nbsp;&nbps;&npbs;&nbps;")
+                .replace(/ /g, "&nbsp;");
+            return "<pre>" + messageOutput + "</pre>";
+        }));
+    }, []), errorOutput = errorMessages.join("");
+    if (errorOutput && !outputHidden) {
+        outputElement.innerHTML = "\n        <div class=\"fuse-box-header\" style=\"\">\n            <h4 style=\"\">Fuse Box Bundle Errors (" + errorMessages.length + "):</h4>\n            <div style=\"float: right;\">\n                <button id=\"" + minimizeToggleId + "\">" + (outputMinimized ? "Expand" : "Minimize") + "</button>\n                <button id=\"" + hideButtonId + "\">Hide</button>\n            </div>\n        </div>\n        <div class=\"fuse-box-errors\">\n            " + errorOutput + "\n        </div>\n        ";
+        document.body.appendChild(outputElement);
+        outputElement.className = outputMinimized ? "" : expandedOutputClass;
+        outputInBody = true;
+        document.getElementById(minimizeToggleId).onclick = function () {
+            outputMinimized = !outputMinimized;
+            storeSetting(minimizeToggleId, outputMinimized);
+            displayBundleErrors();
+        };
+        document.getElementById(hideButtonId).onclick = function () {
+            outputHidden = true;
+            displayBundleErrors();
+        };
+    }
+    else if (outputInBody) {
+        document.body.removeChild(outputElement);
+        outputInBody = false;
+    }
+}
+exports.connect = function (port, uri, reloadFullPage) {
+    if (FuseBox.isServer) {
+        return;
+    }
+    port = port || window.location.port;
+    var client = new Client({
+        port: port,
+        uri: uri
+    });
+    client.connect();
+    client.on("page-reload", function (data) {
+        return window.location.reload();
+    });
+    client.on("page-hmr", function (data) {
+        FuseBox.flush();
+        FuseBox.dynamic(data.path, data.content);
+        if (FuseBox.mainFile) {
+            try {
+                FuseBox.import(FuseBox.mainFile);
+            }
+            catch (e) {
+                if (typeof e === "string") {
+                    if (/not found/.test(e)) {
+                        return window.location.reload();
+                    }
+                }
+                console.error(e);
+            }
+        }
+    });
+    client.on("source-changed", function (data) {
+        console.info("%cupdate \"" + data.path + "\"", "color: #237abe");
+        if (reloadFullPage) {
+            return window.location.reload();
+        }
+        /**
+         * If a plugin handles this request then we don't have to do anything
+         **/
+        for (var index = 0; index < FuseBox.plugins.length; index++) {
+            var plugin = FuseBox.plugins[index];
+            if (plugin.hmrUpdate && plugin.hmrUpdate(data)) {
+                return;
+            }
+        }
+        if (data.type === "hosted-css") {
+            var fileId = data.path.replace(/^\//, "").replace(/[\.\/]+/g, "-");
+            var existing = document.getElementById(fileId);
+            if (existing) {
+                existing.setAttribute("href", data.path + "?" + new Date().getTime());
+            }
+            else {
+                var node = document.createElement("link");
+                node.id = fileId;
+                node.type = "text/css";
+                node.rel = "stylesheet";
+                node.href = data.path;
+                document.getElementsByTagName("head")[0].appendChild(node);
+            }
+        }
+        if (data.type === "js" || data.type === "css") {
+            FuseBox.flush();
+            FuseBox.dynamic(data.path, data.content);
+            if (FuseBox.mainFile) {
+                try {
+                    FuseBox.import(FuseBox.mainFile);
+                }
+                catch (e) {
+                    if (typeof e === "string") {
+                        if (/not found/.test(e)) {
+                            return window.location.reload();
+                        }
+                    }
+                    console.error(e);
+                }
+            }
+        }
+    });
+    client.on("error", function (error) {
+        console.log(error);
+    });
+    client.on("bundle-error", function (_a) {
+        var bundleName = _a.bundleName, message = _a.message;
+        console.error("Bundle error in " + bundleName + ": " + message);
+        var errorsForBundle = bundleErrors[bundleName] || [];
+        errorsForBundle.push(message);
+        bundleErrors[bundleName] = errorsForBundle;
+        displayBundleErrors();
+    });
+    client.on("update-bundle-errors", function (_a) {
+        var bundleName = _a.bundleName, messages = _a.messages;
+        messages.forEach(function (message) { return console.error("Bundle error in " + bundleName + ": " + message); });
+        bundleErrors[bundleName] = messages;
+        displayBundleErrors();
+    });
+};
+
+});
+return ___scope___.entry = "index.js";
+});
+FuseBox.pkg("fusebox-websocket", {}, function(___scope___){
+___scope___.file("index.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var events = require("events");
+var SocketClient = /** @class */ (function () {
+    function SocketClient(opts) {
+        opts = opts || {};
+        var port = opts.port || window.location.port;
+        var protocol = location.protocol === "https:" ? "wss://" : "ws://";
+        var domain = location.hostname || "localhost";
+        this.url = opts.host || "" + protocol + domain + ":" + port;
+        if (opts.uri) {
+            this.url = opts.uri;
+        }
+        this.authSent = false;
+        this.emitter = new events.EventEmitter();
+    }
+    SocketClient.prototype.reconnect = function (fn) {
+        var _this = this;
+        setTimeout(function () {
+            _this.emitter.emit("reconnect", { message: "Trying to reconnect" });
+            _this.connect(fn);
+        }, 5000);
+    };
+    SocketClient.prototype.on = function (event, fn) {
+        this.emitter.on(event, fn);
+    };
+    SocketClient.prototype.connect = function (fn) {
+        var _this = this;
+        console.log("%cConnecting to fusebox HMR at " + this.url, "color: #237abe");
+        setTimeout(function () {
+            _this.client = new WebSocket(_this.url);
+            _this.bindEvents(fn);
+        }, 0);
+    };
+    SocketClient.prototype.close = function () {
+        this.client.close();
+    };
+    SocketClient.prototype.send = function (eventName, data) {
+        if (this.client.readyState === 1) {
+            this.client.send(JSON.stringify({ event: eventName, data: data || {} }));
+        }
+    };
+    SocketClient.prototype.error = function (data) {
+        this.emitter.emit("error", data);
+    };
+    /** Wires up the socket client messages to be emitted on our event emitter */
+    SocketClient.prototype.bindEvents = function (fn) {
+        var _this = this;
+        this.client.onopen = function (event) {
+            console.log("%cConnected", "color: #237abe");
+            if (fn) {
+                fn(_this);
+            }
+        };
+        this.client.onerror = function (event) {
+            _this.error({ reason: event.reason, message: "Socket error" });
+        };
+        this.client.onclose = function (event) {
+            _this.emitter.emit("close", { message: "Socket closed" });
+            if (event.code !== 1011) {
+                _this.reconnect(fn);
+            }
+        };
+        this.client.onmessage = function (event) {
+            var data = event.data;
+            if (data) {
+                var item = JSON.parse(data);
+                _this.emitter.emit(item.type, item.data);
+                _this.emitter.emit("*", item);
+            }
+        };
+    };
+    return SocketClient;
+}());
+exports.SocketClient = SocketClient;
+
+});
+return ___scope___.entry = "index.js";
+});
+FuseBox.import("fusebox-hot-reload").connect(4444, "", false)
+
+FuseBox.import("default/index.js");
+FuseBox.main("default/index.js");
+})
+(function(e){function r(e){var r=e.charCodeAt(0),n=e.charCodeAt(1);if((m||58!==n)&&(r>=97&&r<=122||64===r)){if(64===r){var t=e.split("/"),i=t.splice(2,t.length).join("/");return[t[0]+"/"+t[1],i||void 0]}var o=e.indexOf("/");if(o===-1)return[e];var a=e.substring(0,o),f=e.substring(o+1);return[a,f]}}function n(e){return e.substring(0,e.lastIndexOf("/"))||"./"}function t(){for(var e=[],r=0;r<arguments.length;r++)e[r]=arguments[r];for(var n=[],t=0,i=arguments.length;t<i;t++)n=n.concat(arguments[t].split("/"));for(var o=[],t=0,i=n.length;t<i;t++){var a=n[t];a&&"."!==a&&(".."===a?o.pop():o.push(a))}return""===n[0]&&o.unshift(""),o.join("/")||(o.length?"/":".")}function i(e){var r=e.match(/\.(\w{1,})$/);return r&&r[1]?e:e+".js"}function o(e){if(m){var r,n=document,t=n.getElementsByTagName("head")[0];/\.css$/.test(e)?(r=n.createElement("link"),r.rel="stylesheet",r.type="text/css",r.href=e):(r=n.createElement("script"),r.type="text/javascript",r.src=e,r.async=!0),t.insertBefore(r,t.firstChild)}}function a(e,r){for(var n in e)e.hasOwnProperty(n)&&r(n,e[n])}function f(e){return{server:require(e)}}function u(e,n){var o=n.path||"./",a=n.pkg||"default",u=r(e);if(u&&(o="./",a=u[0],n.v&&n.v[a]&&(a=a+"@"+n.v[a]),e=u[1]),e)if(126===e.charCodeAt(0))e=e.slice(2,e.length),o="./";else if(!m&&(47===e.charCodeAt(0)||58===e.charCodeAt(1)))return f(e);var s=x[a];if(!s){if(m&&"electron"!==_.target)throw"Package not found "+a;return f(a+(e?"/"+e:""))}e=e?e:"./"+s.s.entry;var l,d=t(o,e),c=i(d),p=s.f[c];return!p&&c.indexOf("*")>-1&&(l=c),p||l||(c=t(d,"/","index.js"),p=s.f[c],p||"."!==d||(c=s.s&&s.s.entry||"index.js",p=s.f[c]),p||(c=d+".js",p=s.f[c]),p||(p=s.f[d+".jsx"]),p||(c=d+"/index.jsx",p=s.f[c])),{file:p,wildcard:l,pkgName:a,versions:s.v,filePath:d,validPath:c}}function s(e,r,n){if(void 0===n&&(n={}),!m)return r(/\.(js|json)$/.test(e)?h.require(e):"");if(n&&n.ajaxed===e)return console.error(e,"does not provide a module");var i=new XMLHttpRequest;i.onreadystatechange=function(){if(4==i.readyState)if(200==i.status){var n=i.getResponseHeader("Content-Type"),o=i.responseText;/json/.test(n)?o="module.exports = "+o:/javascript/.test(n)||(o="module.exports = "+JSON.stringify(o));var a=t("./",e);_.dynamic(a,o),r(_.import(e,{ajaxed:e}))}else console.error(e,"not found on request"),r(void 0)},i.open("GET",e,!0),i.send()}function l(e,r){var n=y[e];if(n)for(var t in n){var i=n[t].apply(null,r);if(i===!1)return!1}}function d(e){if(null!==e&&["function","object","array"].indexOf(typeof e)!==-1&&!e.hasOwnProperty("default"))return Object.isFrozen(e)?void(e.default=e):void Object.defineProperty(e,"default",{value:e,writable:!0,enumerable:!1})}function c(e,r){if(void 0===r&&(r={}),58===e.charCodeAt(4)||58===e.charCodeAt(5))return o(e);var t=u(e,r);if(t.server)return t.server;var i=t.file;if(t.wildcard){var a=new RegExp(t.wildcard.replace(/\*/g,"@").replace(/[.?*+^$[\]\\(){}|-]/g,"\\$&").replace(/@@/g,".*").replace(/@/g,"[a-z0-9$_-]+"),"i"),f=x[t.pkgName];if(f){var p={};for(var v in f.f)a.test(v)&&(p[v]=c(t.pkgName+"/"+v));return p}}if(!i){var g="function"==typeof r,y=l("async",[e,r]);if(y===!1)return;return s(e,function(e){return g?r(e):null},r)}var w=t.pkgName;if(i.locals&&i.locals.module)return i.locals.module.exports;var b=i.locals={},j=n(t.validPath);b.exports={},b.module={exports:b.exports},b.require=function(e,r){var n=c(e,{pkg:w,path:j,v:t.versions});return _.sdep&&d(n),n},m||!h.require.main?b.require.main={filename:"./",paths:[]}:b.require.main=h.require.main;var k=[b.module.exports,b.require,b.module,t.validPath,j,w];return l("before-import",k),i.fn.apply(k[0],k),l("after-import",k),b.module.exports}if(e.FuseBox)return e.FuseBox;var p="undefined"!=typeof ServiceWorkerGlobalScope,v="undefined"!=typeof WorkerGlobalScope,m="undefined"!=typeof window&&"undefined"!=typeof window.navigator||v||p,h=m?v||p?{}:window:global;m&&(h.global=v||p?{}:window),e=m&&"undefined"==typeof __fbx__dnm__?e:module.exports;var g=m?v||p?{}:window.__fsbx__=window.__fsbx__||{}:h.$fsbx=h.$fsbx||{};m||(h.require=require);var x=g.p=g.p||{},y=g.e=g.e||{},_=function(){function r(){}return r.global=function(e,r){return void 0===r?h[e]:void(h[e]=r)},r.import=function(e,r){return c(e,r)},r.on=function(e,r){y[e]=y[e]||[],y[e].push(r)},r.exists=function(e){try{var r=u(e,{});return void 0!==r.file}catch(e){return!1}},r.remove=function(e){var r=u(e,{}),n=x[r.pkgName];n&&n.f[r.validPath]&&delete n.f[r.validPath]},r.main=function(e){return this.mainFile=e,r.import(e,{})},r.expose=function(r){var n=function(n){var t=r[n].alias,i=c(r[n].pkg);"*"===t?a(i,function(r,n){return e[r]=n}):"object"==typeof t?a(t,function(r,n){return e[n]=i[r]}):e[t]=i};for(var t in r)n(t)},r.dynamic=function(r,n,t){this.pkg(t&&t.pkg||"default",{},function(t){t.file(r,function(r,t,i,o,a){var f=new Function("__fbx__dnm__","exports","require","module","__filename","__dirname","__root__",n);f(!0,r,t,i,o,a,e)})})},r.flush=function(e){var r=x.default;for(var n in r.f)e&&!e(n)||delete r.f[n].locals},r.pkg=function(e,r,n){if(x[e])return n(x[e].s);var t=x[e]={};return t.f={},t.v=r,t.s={file:function(e,r){return t.f[e]={fn:r}}},n(t.s)},r.addPlugin=function(e){this.plugins.push(e)},r.packages=x,r.isBrowser=m,r.isServer=!m,r.plugins=[],r}();return m||(h.FuseBox=_),e.FuseBox=_}(this))

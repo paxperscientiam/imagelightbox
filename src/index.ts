@@ -22,7 +22,7 @@ $.fn.imageLightbox = Object.assign<any, ILBGlobalSettings>(
             ...options,
         };
 
-        $(document).off('click', options.selector);
+        $(document).off('click', mergedOptions.selector);
 
         this.each(() => {
             $.data( this, $.fn.imageLightbox.PROJECT_NAME, new ImageLightbox(mergedOptions, this) );
