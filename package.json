@@ -41,7 +41,8 @@
     "fix:js": "eslint --fix src/**/*.js",
     "test": "npm run test:js && npm run test:html",
     "test:html": "mocha --recursive test/src",
-    "test:js": "gulp eslint"
+    "test:js": "gulp eslint",
+    "test:ts": "tsc -w --noEmit"
   },
   "browserslist": [
     "last 2 versions",

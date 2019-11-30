@@ -21,3 +21,19 @@ interface ILBOptions {
     quitOnDocClick: boolean;
     quitOnEscKey: boolean;
 }
+
+interface ILBGlobalSettings {
+    options: ILBOptions;
+    PROJECT_NAME: string;
+}
+
+declare interface IScreen {
+    width: number;
+    height: number;
+}
+
+interface IImage {
+    width: number;
+    height: number;
+    gutterFactor: number;
+}
