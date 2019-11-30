@@ -1,0 +1,432 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>imagelightbox</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">imagelightbox</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> imagelightbox</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#imagelightbox" id="imagelightbox" style="color: inherit; text-decoration: none;">
+					<h1>imagelightbox</h1>
+				</a>
+				<p><a href="https://badge.fury.io/js/imagelightbox"><img src="https://badge.fury.io/js/imagelightbox.svg" alt="npm version"></a>
+				<a href="http://travis-ci.org/marekdedic/imagelightbox"><img src="https://secure.travis-ci.org/marekdedic/imagelightbox.png?branch=master" alt="Build Status"></a></p>
+				<p>Image Lightbox, Responsive and Touch‑friendly.</p>
+				<p>This is a fork of the lightbox plugin created by <a href="http://osvaldas.info/image-lightbox-responsive-touch-friendly/">Osvaldas Valutis</a>.</p>
+				<p>See most of the available options at the <a href="http://marekdedic.github.io/imagelightbox/">Demo Page</a></p>
+				<a href="#requirements-and-browser-support" id="requirements-and-browser-support" style="color: inherit; text-decoration: none;">
+					<h2>Requirements and Browser support</h2>
+				</a>
+				<ul>
+					<li>jQuery 1.12 (earlier version not tested), feel free to use jQuery v2 or v3 if you don&#39;t need to support older browsers</li>
+					<li>All major desktop browsers and versions as well as mobile browsers on Android, iOS and Windows Phone.</li>
+					<li>IE8 is NOT supported</li>
+				</ul>
+				<a href="#how-to-use" id="how-to-use" style="color: inherit; text-decoration: none;">
+					<h2>How to use</h2>
+				</a>
+				<pre><code class="language-javascript">&lt;script src=<span class="hljs-string">"jquery.js"</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"imagelightbox.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    $( <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)
+    </span>{
+        $( selector ).imageLightbox();
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre>
+				<a href="#options" id="options" style="color: inherit; text-decoration: none;">
+					<h2>Options</h2>
+				</a>
+				<p>The list of options and their default values is:</p>
+				<pre><code class="language-javascript">$( selector ).imageLightbox({
+    <span class="hljs-attr">selector</span>:       <span class="hljs-string">'a[data-imagelightbox]'</span>, <span class="hljs-comment">// string;</span>
+    <span class="hljs-attr">id</span>:             <span class="hljs-string">'imagelightbox'</span>,         <span class="hljs-comment">// string;</span>
+    <span class="hljs-attr">allowedTypes</span>:   <span class="hljs-string">'png|jpg|jpeg|gif'</span>,      <span class="hljs-comment">// string;          use empty string to allow any file type</span>
+    <span class="hljs-attr">animationSpeed</span>: <span class="hljs-number">250</span>,                     <span class="hljs-comment">// integer;</span>
+    <span class="hljs-attr">activity</span>:       <span class="hljs-literal">false</span>,                   <span class="hljs-comment">// bool;            show activity indicator</span>
+    <span class="hljs-attr">arrows</span>:         <span class="hljs-literal">false</span>,                   <span class="hljs-comment">// bool;            show left/right arrows</span>
+    <span class="hljs-attr">button</span>:         <span class="hljs-literal">false</span>,                   <span class="hljs-comment">// bool;            show close button</span>
+    <span class="hljs-attr">caption</span>:        <span class="hljs-literal">false</span>,                   <span class="hljs-comment">// bool;            show captions</span>
+    <span class="hljs-attr">enableKeyboard</span>: <span class="hljs-literal">true</span>,                    <span class="hljs-comment">// bool;            enable keyboard shortcuts (arrows Left/Right and Esc)</span>
+    <span class="hljs-attr">history</span>:        <span class="hljs-literal">false</span>,                   <span class="hljs-comment">// bool;            enable image permalinks and history</span>
+    <span class="hljs-attr">fullscreen</span>:     <span class="hljs-literal">false</span>                    <span class="hljs-comment">// bool;            enable fullscreen (enter/return key)</span>
+    <span class="hljs-attr">gutter</span>:         <span class="hljs-number">10</span>,                      <span class="hljs-comment">// integer;         window height less height of image as a percentage</span>
+    <span class="hljs-attr">offsetY</span>:        <span class="hljs-number">0</span>,                       <span class="hljs-comment">// integer;         vertical offset in terms of gutter</span>
+    <span class="hljs-attr">navigation</span>:     <span class="hljs-literal">false</span>,                   <span class="hljs-comment">// bool;            show navigation</span>
+    <span class="hljs-attr">overlay</span>:        <span class="hljs-literal">false</span>,                   <span class="hljs-comment">// bool;            display the lightbox as an overlay</span>
+    <span class="hljs-attr">preloadNext</span>:    <span class="hljs-literal">true</span>,                    <span class="hljs-comment">// bool;            silently preload the next image</span>
+    <span class="hljs-attr">quitOnEnd</span>:      <span class="hljs-literal">false</span>,                   <span class="hljs-comment">// bool;            quit after viewing the last image</span>
+    <span class="hljs-attr">quitOnImgClick</span>: <span class="hljs-literal">false</span>,                   <span class="hljs-comment">// bool;            quit when the viewed image is clicked</span>
+    <span class="hljs-attr">quitOnDocClick</span>: <span class="hljs-literal">true</span>,                    <span class="hljs-comment">// bool;            quit when anything but the viewed image is clicked</span>
+    <span class="hljs-attr">quitOnEscKey</span>:   <span class="hljs-literal">true</span>                     <span class="hljs-comment">// bool;            quit when Esc key is pressed</span>
+});</code></pre>
+				<a href="#starting-lightbox-with-javascript-call" id="starting-lightbox-with-javascript-call" style="color: inherit; text-decoration: none;">
+					<h2>Starting lightbox with JavaScript call</h2>
+				</a>
+				<p>imageLightBox can be started with <em>startImageLightbox()</em> JavaScript function call.</p>
+				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+					<h6>Example:</h6>
+				</a>
+				<pre><code class="language-javascript">&lt;script src=<span class="hljs-string">"jquery.js"</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"imagelightbox.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    $( <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)
+    </span>{
+        <span class="hljs-keyword">var</span> gallery = $( selector ).imageLightbox();
+        gallery.startImageLightbox();
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre>
+				<a href="#example-open-specific-image" id="example-open-specific-image" style="color: inherit; text-decoration: none;">
+					<h6>Example: Open specific image</h6>
+				</a>
+				<pre><code class="language-javascript">&lt;script src=<span class="hljs-string">"jquery.js"</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"imagelightbox.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    $( <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)
+    </span>{
+        <span class="hljs-keyword">var</span> gallery = $( selector ).imageLightbox();
+        <span class="hljs-keyword">var</span> $image = $ ( image_selector );
+        gallery.startImageLightbox( $image );
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre>
+				<a href="#adding-captions-to-lightbox" id="adding-captions-to-lightbox" style="color: inherit; text-decoration: none;">
+					<h2>Adding captions to lightbox</h2>
+				</a>
+				<p>add an &quot;ilb2-caption&quot; data-attribute to the element, fallback value is the alt-attribute of the thumbnail-image</p>
+				<pre><code class="language-html">    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">data-imagelightbox</span>=<span class="hljs-string">"x"</span> <span class="hljs-attr">data-ilb2-caption</span>=<span class="hljs-string">"caption text"</span>
+        <span class="hljs-attr">href</span>=<span class="hljs-string">"image.jpg"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"thumbnail.jpg"</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">"fallback caption"</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></code></pre>
+				<a href="#fullscreen" id="fullscreen" style="color: inherit; text-decoration: none;">
+					<h2>Fullscreen</h2>
+				</a>
+				<p>Simply set the <code>fullscreen</code> option to true to enable the option. If the user&#39;s browser supports the fullscreen API,
+				they can switch to fullscreen mode by pressing enter.</p>
+				<a href="#video" id="video" style="color: inherit; text-decoration: none;">
+					<h2>Video</h2>
+				</a>
+				<p>Video can be displayed in imagelightbox, by including a <code>data-ilb2-video</code> attribute in the link. This attribute should contain a JSON-encoded list of parameters as they would be in an HTML5 video tag. For multiple video sources, the <code>sources</code> field can be added, containing a list of similarily encoded HTML5 source tags.</p>
+				<pre><code class="language-html">    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">data-ilb2-video</span>=<span class="hljs-string">'{"controls":"controls", "autoplay":"autoplay", "sources":[{"src":"images/video.m4v", "type":"video/mp4"}]}'</span> <span class="hljs-attr">data-imagelightbox</span>=<span class="hljs-string">"x"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"images/video-thumb.jpg"</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></code></pre>
+				<a href="#hooks" id="hooks" style="color: inherit; text-decoration: none;">
+					<h2>Hooks</h2>
+				</a>
+				<p>Image Lightbox now triggers unique events upon start, finish, and when either the next or previous image is requested.
+				These events are, respectively, &quot;start.ilb2&quot;, &quot;quit.ilb2&quot;, &quot;loaded.ilb2&quot;, &quot;next.ilb2&quot;, and &quot;previous.ilb2&quot;.</p>
+				<p>Usage example:</p>
+				<pre><code class="language-javascript"> $(<span class="hljs-built_in">document</span>)
+    .on(<span class="hljs-string">"start.ilb2"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">_, e</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Image Lightbox has started on element: "</span>);
+    <span class="hljs-built_in">console</span>.log(e);
+    })
+    .on(<span class="hljs-string">"next.ilb2"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">_, e</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Next image: "</span>);
+    <span class="hljs-built_in">console</span>.log(e);
+    })
+    .on(<span class="hljs-string">"previous.ilb2"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">_, e</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Previous image: "</span>);
+    <span class="hljs-built_in">console</span>.log(e);
+    })
+    .on(<span class="hljs-string">"quit.ilb2"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Image Lightbox has quit."</span>);
+    });</code></pre>
+				<a href="#using-multiple-sets" id="using-multiple-sets" style="color: inherit; text-decoration: none;">
+					<h2>Using multiple sets</h2>
+				</a>
+				<p>As of commit bf2b4db, imageLightbox supports &quot;sets.&quot;
+				A set is defined by the links with a common value for the &quot;data-imagelightbox&quot; attribute.</p>
+				<p>For example:</p>
+				<pre><code class="language-html">    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">data-imagelightbox</span>=<span class="hljs-string">"a"</span>
+        <span class="hljs-attr">href</span>=<span class="hljs-string">"image_1.jpg"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"thumbnail_1.jpg"</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">"caption"</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">data-imagelightbox</span>=<span class="hljs-string">"a"</span>
+        <span class="hljs-attr">href</span>=<span class="hljs-string">"image_2.jpg"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"thumbnail_2.jpg"</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">"caption"</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">data-imagelightbox</span>=<span class="hljs-string">"b"</span>
+        <span class="hljs-attr">href</span>=<span class="hljs-string">"image_3.jpg"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"thumbnail_3.jpg"</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">"caption"</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">data-imagelightbox</span>=<span class="hljs-string">"b"</span>
+        <span class="hljs-attr">href</span>=<span class="hljs-string">"image_4.jpg"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"thumbnail_4.jpg"</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">"caption"</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></code></pre>
+				<p>When the user clicks any of the thumbnails with a data-imagelightbox value of &quot;a&quot;, only those images will appear in the
+				lightbox. The same is true when clicking an image with data-imagelightbox value of &quot;b&quot; and any other.</p>
+				<p>If you want unlimited gallerys call this snippet (for example: <a href="https://jsfiddle.net/7ow26fcg/">https://jsfiddle.net/7ow26fcg/</a>):</p>
+				<p><i>(Используйте этот код вызова lightbox, если у вас на странице несколько галерей, где у каждой галереи уникальное
+				значение атрибута data-imagelightbox. Например data-imagelightbox=&quot;gallery_1&quot;, data-imagelightbox=&quot;gallery_2&quot; и т.д.)</i></p>
+				<pre><code class="language-javascript">&lt;script&gt;
+    <span class="hljs-keyword">var</span> attrs = {};
+    <span class="hljs-keyword">var</span> classes = $(<span class="hljs-string">"a[data-imagelightbox]"</span>).map(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">indx, element</span>)</span>{
+      <span class="hljs-keyword">var</span> key = $(element).attr(<span class="hljs-string">"data-imagelightbox"</span>);
+      attrs[key] = <span class="hljs-literal">true</span>;
+      <span class="hljs-keyword">return</span> attrs;
+    });
+    <span class="hljs-keyword">var</span> attrsName = <span class="hljs-built_in">Object</span>.keys(attrs);
+
+    attrsName.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">entry</span>) </span>{
+        $( <span class="hljs-string">"[data-imagelightbox='"</span>+entry+<span class="hljs-string">"']"</span> ).imageLightbox({
+            <span class="hljs-attr">overlay</span>: <span class="hljs-literal">true</span>
+        });
+    });
+<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre>
+				<p>In order to &quot;capture&quot; all possible sets on a give webpage, it is necessary to apply imageLightbox to
+				&quot;a[data-imagelightbox]&quot;; that is, without specifying a particular data-imagelightbox attribute value.</p>
+				<a href="#adding-images-dynamically-to-lightbox" id="adding-images-dynamically-to-lightbox" style="color: inherit; text-decoration: none;">
+					<h2>Adding images dynamically to lightbox</h2>
+				</a>
+				<p>imageLightBox allows adding more images dynamically at runtime</p>
+				<a href="#example-1" id="example-1" style="color: inherit; text-decoration: none;">
+					<h6>Example:</h6>
+				</a>
+				<pre><code class="language-javascript">&lt;script src=<span class="hljs-string">"jquery.js"</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"imagelightbox.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    $( <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)
+    </span>{
+        <span class="hljs-keyword">var</span> gallery = $( selector ).imageLightbox();
+        <span class="hljs-keyword">var</span> image = $( <span class="hljs-string">'&lt;img /&gt;'</span> );
+        gallery.addToImageLightbox( image );
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre>
+				<a href="#permalinks-amp-history" id="permalinks-amp-history" style="color: inherit; text-decoration: none;">
+					<h2>Permalinks &amp; History</h2>
+				</a>
+				<p>When history is enabled, upon clicking on an image, the query field <code>imageLightboxIndex=X</code> is added to the URL, where <code>X</code> is the index of the currently opened image. This means that such an URL can be copied and used as a permanent link to that particular image. When somebody opens the URL, the lightbox will be open on the image in question. This also works with multiple sets, where an aditional query field <code>imageLightboxSet=Y</code> is used to distinguish between the sets in one page.</p>
+				<p>In some cases, this could lead to a different image being opened, for example if new images have been added to the set, or if the order of the images has changed. To solve this issue, whenever the HTML attribute <code>data-ilb2-id=X</code> is present in the image tag, this value is used instead of the image index (this means this id has to be different for each image and mustn&#39;t change over time).</p>
+				<a href="#example-2" id="example-2" style="color: inherit; text-decoration: none;">
+					<h6>Example:</h6>
+				</a>
+				<pre><code class="language-javascript">&lt;script src=<span class="hljs-string">"jquery.js"</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"imagelightbox.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+
+&lt;a href="image1.jpg" data-imagelightbox="images" data-ilb2-id="img1"&gt;&lt;img src="thumb1.jpg"&gt;&lt;/a&gt;
+&lt;a href="image2.jpg" data-imagelightbox="images" data-ilb2-id="img2"&gt;&lt;img src="thumb2.jpg"&gt;&lt;/a&gt;
+&lt;a href="image3.jpg" data-imagelightbox="images" data-ilb2-id="img3"&gt;&lt;img src="thumb3.jpg"&gt;&lt;/a&gt;
+
+&lt;script&gt;
+    $( function()
+    {
+        $('a[data-imagelightbox="images"]').imageLightbox({
+            history: true
+        });
+    });
+&lt;/script&gt;</code></pre>
+				<p>If you want a dynamically added image to be opened after the page load, you have to call <code>gallery.openHistory()</code> on the ImageLightbox object yourself after adding the image.</p>
+				<a href="#changelog" id="changelog" style="color: inherit; text-decoration: none;">
+					<h2>Changelog</h2>
+				</a>
+				<p>You can find all notable changes to this project in the <a href="CHANGELOG.md">CHANGELOG.md</a>.</p>
+				<a href="#see-also" id="see-also" style="color: inherit; text-decoration: none;">
+					<h2>See also</h2>
+				</a>
+				<p>Used by <a href="https://wordpress.org/plugins/skaut-google-drive-gallery/">https://wordpress.org/plugins/skaut-google-drive-gallery/</a></p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class">
+						<a href="classes/imagelightbox.html" class="tsd-kind-icon">Image<wbr>Lightbox</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/iimage.html" class="tsd-kind-icon">IImage</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/ilbglobalsettings.html" class="tsd-kind-icon">ILBGlobal<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/ilboptions.html" class="tsd-kind-icon">ILBOptions</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/iscreen.html" class="tsd-kind-icon">IScreen</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/jquery.html" class="tsd-kind-icon">JQuery</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/preloadedvideo.html" class="tsd-kind-icon">Preloaded<wbr>Video</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#_arrowleftobject" class="tsd-kind-icon">$arrow<wbr>Left<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#_arrowrightobject" class="tsd-kind-icon">$arrow<wbr>Right<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#project_name" class="tsd-kind-icon">PROJECT_<wbr>NAME</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#hascsstransitionsupport" class="tsd-kind-icon">has<wbr>Css<wbr>Transition<wbr>Support</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#hasfullscreensupport" class="tsd-kind-icon">has<wbr>Fullscreen<wbr>Support</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#hashistorysupport" class="tsd-kind-icon">has<wbr>History<wbr>Support</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#haspointers" class="tsd-kind-icon">has<wbr>Pointers</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#hastouch" class="tsd-kind-icon">has<wbr>Touch</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#csstransitionsupport" class="tsd-kind-icon">css<wbr>Transition<wbr>Support</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#csstransitiontranslatex" class="tsd-kind-icon">css<wbr>Transition<wbr>TranslateX</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#setsizes" class="tsd-kind-icon">set<wbr>Sizes</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#togglefullscreen" class="tsd-kind-icon">toggle<wbr>Full<wbr>Screen</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#wastouched" class="tsd-kind-icon">was<wbr>Touched</a>
+					</li>
+					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#_components" class="tsd-kind-icon">$components</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
