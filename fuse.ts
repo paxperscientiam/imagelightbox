@@ -85,12 +85,12 @@ class CTX {
 
     getConfig() {
         return FuseBox.init({
-            //             shim: {
-            //                 jquery: {
-            //                     exports: '$',
-            //                     source: 'node_modules/jquery/dist/jquery.js',
-            //                 },
-            //             },
+            shim: {
+                jquery: {
+                    exports: '$',
+                    source: 'node_modules/jquery/dist/jquery.js',
+                },
+            },
 
             homeDir:  dlv(PKG, 'homeDir') || 'src',
             output: 'dist/$name.js',
@@ -107,12 +107,9 @@ class CTX {
                     cssPath: 'css',
                     path: '.',
                     template: 'src/index.html',
+                    appendBundles: true,
                 }),
                 [
-                    SassPlugin({
-                        importer: true,
-                        //                        resources: [{ test: /.*/, file: 'resources.scss' }],
-                    }),
                     PostCSSPlugin(aggregatePlugins(
                         [
                             Unprefix(),

@@ -1,3 +1,5 @@
+import '~/imagelightbox.css';
+
 const PROJECT_NAME = 'imageLightbox';
 
 import { ImageLightbox } from './imagelightbox';
@@ -21,8 +23,6 @@ $.fn.imageLightbox = Object.assign<any, ILBGlobalSettings>(
             ...$.fn.imageLightbox.options,
             ...options,
         };
-
-        $(document).off('click', mergedOptions.selector);
 
         this.each(() => {
             $.data( this, $.fn.imageLightbox.PROJECT_NAME, new ImageLightbox(mergedOptions, this) );

@@ -18,15 +18,13 @@ import {
     toggleFullScreen,
 } from './imagelightbox.support';
 
-import {
-    setSizes,
-} from './imagelightbox.transforms';
-
 import { $components } from './imagelightbox.components';
+
+const $window: JQuery<Window> = $(window);
 
 export class ImageLightbox implements ImageLightboxPlugin {
     currentIndex: number = 0;
-    image: JQuery<HTMLElement|HTMLImageElement|HTMLVideoElement>;
+    image: JQuery<HTMLElement|HTMLImageElement|HTMLVideoElement> = $();
     inProgress: boolean = false;
     swipeDiff: number = 0;
     target: JQuery<HTMLElement> = $();
@@ -43,36 +41,16 @@ export class ImageLightbox implements ImageLightboxPlugin {
     constructor(options: ILBOptions, elementT: JQuery) {
         const self = this;
 
-        this.image = $(elementT);
-
         this.options = options;
 
-        const captionHeight = options.caption ? $components.$captionObject.outerHeight()! : 0;
-        const screenWidth = $(window).width()!;
-        const screenHeight = $(window).height()! - captionHeight;
-        const gutterFactor = Math.abs(1 - options.gutter/100);
-
-        const videoElement = this.image.get(0) as HTMLVideoElement;
-        if(videoElement.videoWidth !== undefined) {
-//            setSizes({width:screenWidth, height:screenHeight}, {width:videoElement.videoWidth, height:videoElement.videoHeight});
-            return;
-        }
-
-        const tmpImage = new Image();
-        tmpImage.src = self.image.attr('src')!;
-        tmpImage.onload = function (): void {
-            // tmpImage.width, imageHeight: tmpImage.height
-            self.image = setSizes({width:screenWidth, height:screenHeight}, {width: tmpImage.width, height:tmpImage.height, gutterFactor}, $(elementT as JQuery<HTMLImageElement>));
-        };
-
-        $(window).on('resize.ilb7', this._setImage);
-        if (hasHistorySupport && options.history) {
-            $(window).on('popstate', this._popHistory);
+        $window.on('resize.ilb7', this._setImage);
+        if (hasHistorySupport && self.options.history) {
+            $window.on('popstate', this._popHistory);
         }
 
         $(document).ready((): void => {
 
-            if (options.quitOnDocClick) {
+            if (self.options.quitOnDocClick) {
                 $(document).on(hasTouch ? 'touchend.ilb7' : 'click.ilb7', function (e): void {
                     if (self.image.length && !$(e.target).is(self.image)) {
                         e.preventDefault();
@@ -81,7 +59,7 @@ export class ImageLightbox implements ImageLightboxPlugin {
                 });
             }
 
-            if (options.fullscreen && hasFullscreenSupport) {
+            if (self.options.fullscreen && hasFullscreenSupport) {
                 $(document).on('keydown.ilb7', function (e): void {
                     if (!self.image.length) {
                         return;
@@ -93,17 +71,17 @@ export class ImageLightbox implements ImageLightboxPlugin {
                     if ([13].includes(e.which!)) {
                         e.stopPropagation();
                         e.preventDefault();
-                        toggleFullScreen(options.id);
+                        toggleFullScreen(self.options.id);
                     }
                 });
             }
 
-            if (options.enableKeyboard) {
+            if (self.options.enableKeyboard) {
                 $(document).on('keydown.ilb7', (e): void => {
                     if (!self.image.length) {
                         return;
                     }
-                    if ([27].includes(e.which!) && options.quitOnEscKey) {
+                    if ([27].includes(e.which!) && self.options.quitOnEscKey) {
                         e.stopPropagation();
                         e.preventDefault();
                         self._quitImageLightbox();
@@ -121,7 +99,7 @@ export class ImageLightbox implements ImageLightboxPlugin {
                 });
             }
         });
-        this._addTargets($());
+        this._addTargets($(elementT));
 
         this._openHistory();
 
@@ -386,9 +364,45 @@ export class ImageLightbox implements ImageLightboxPlugin {
     }
 
     _setImage(): void {
+        const self = this;
         if (!this.image.length) {
             return;
         }
+
+        const captionHeight = this.options.caption ? $components.$captionObject.outerHeight()! : 0;
+        const screenWidth = $window.width()!;
+        const screenHeight = $window.height()! - captionHeight;
+        const gutterFactor = Math.abs(1 - this.options.gutter/100);
+
+        function setSizes(imageWidth: number, imageHeight: number): any {
+            if (imageWidth > screenWidth || imageHeight > screenHeight) {
+                var ratio = imageWidth / imageHeight > screenWidth / screenHeight ? imageWidth / screenWidth : imageHeight / screenHeight;
+                imageWidth /= ratio;
+                imageHeight /= ratio;
+            }
+            let cssHeight = imageHeight*gutterFactor;
+            let cssWidth = imageWidth*gutterFactor;
+            // @ts-ignore
+            let cssLeft = ($window.width() - cssWidth ) / 2;
+
+            self.image.css({
+                'width': cssWidth + 'px',
+                'height': cssHeight + 'px',
+                'left':  cssLeft + 'px'
+            });
+        }
+
+        // if(self.image.get(0).videoWidth !== undefined) {
+        //     setSizes(self.image.get(0).videoWidth, self.image.get(0).videoHeight);
+        //     return;
+        // }
+
+        var tmpImage = new Image();
+        tmpImage.src = self.image.attr('src') as string;
+        tmpImage.onload = function() {
+            setSizes(tmpImage.width, tmpImage.height);
+        };
+
     }
 
     _previousTarget(): void {
@@ -644,6 +658,7 @@ export class ImageLightbox implements ImageLightboxPlugin {
     }
 
     _addTargets(newTargets: JQuery): void {
+        console.log(newTargets);
         const self = this;
         newTargets.each(function (): void {
             self.targets = newTargets.add($(this));
