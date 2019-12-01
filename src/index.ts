@@ -6,6 +6,7 @@ import { ImageLightbox } from './imagelightbox';
 
 $.fn.imageLightbox = Object.assign<any, ILBGlobalSettings>(
     function(this: JQuery, options: Partial<ILBOptions>): JQuery {
+        const self = this;
         // guard against double initialization
         if ($.data( this, PROJECT_NAME) != null) {
             return this;
@@ -24,9 +25,24 @@ $.fn.imageLightbox = Object.assign<any, ILBGlobalSettings>(
             ...options,
         };
 
-        this.each(() => {
-            $.data( this, $.fn.imageLightbox.PROJECT_NAME, new ImageLightbox(mergedOptions, this) );
-        });
+        // this.each(() => {
+        //     const Instance = new ImageLightbox(mergedOptions, this);
+        //     //Instance.
+        //     // @ts-ignore
+        //     // self.quit = Instance.quitImageLightbox();
+        //     $.data( this, $.fn.imageLightbox.PROJECT_NAME, Instance );
+        // });
+
+        const Instance = new ImageLightbox(mergedOptions, this);
+        //Instance.
+        // @ts-ignore
+        // self.quit = Instance.quitImageLightbox();
+        $.data( this, $.fn.imageLightbox.PROJECT_NAME, Instance );
+
+        // @ts-ignore
+        this.shit = function() {
+            return 66;
+        };
 
         return this;
     },

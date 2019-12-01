@@ -32,5 +32,4 @@ export const $components = {
     $wrapper: $('<div/>', {
         class: 'imagelightbox-wrapper'
     }),
-    $body: $('body')
 };

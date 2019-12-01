@@ -20,8 +20,6 @@ import {
 
 import { $components } from './imagelightbox.components';
 
-const $window: JQuery<Window> = $(window);
-
 export class ImageLightbox implements ImageLightboxPlugin {
     currentIndex: number = 0;
     image: JQuery<HTMLElement|HTMLImageElement|HTMLVideoElement> = $();
@@ -38,14 +36,17 @@ export class ImageLightbox implements ImageLightboxPlugin {
 
     PROJECT_NAME: string = 'imageLightbox';
 
+    $window: JQuery<Window> = $(window);
+    $body: JQuery = $('body');
+
     constructor(options: ILBOptions, elementT: JQuery) {
         const self = this;
 
         this.options = options;
 
-        $window.on('resize.ilb7', this._setImage);
+        self.$window.on('resize.ilb7', this._setImage);
         if (hasHistorySupport && self.options.history) {
-            $window.on('popstate', this._popHistory);
+            self.$window.on('popstate', this._popHistory);
         }
 
         $(document).ready((): void => {
@@ -365,13 +366,18 @@ export class ImageLightbox implements ImageLightboxPlugin {
 
     _setImage(): void {
         const self = this;
-        if (!this.image.length) {
+        const imgTest = this.image;
+
+        if (imgTest == null) {
             return;
         }
 
+        console.log("setting image .. ");
+        console.log(this.image);
+
         const captionHeight = this.options.caption ? $components.$captionObject.outerHeight()! : 0;
-        const screenWidth = $window.width()!;
-        const screenHeight = $window.height()! - captionHeight;
+        const screenWidth = self.$window.width()!;
+        const screenHeight = self.$window.height()! - captionHeight;
         const gutterFactor = Math.abs(1 - this.options.gutter/100);
 
         function setSizes(imageWidth: number, imageHeight: number): any {
@@ -383,7 +389,7 @@ export class ImageLightbox implements ImageLightboxPlugin {
             let cssHeight = imageHeight*gutterFactor;
             let cssWidth = imageWidth*gutterFactor;
             // @ts-ignore
-            let cssLeft = ($window.width() - cssWidth ) / 2;
+            let cssLeft = (self.$window.width() - cssWidth ) / 2;
 
             self.image.css({
                 'width': cssWidth + 'px',
@@ -440,8 +446,8 @@ export class ImageLightbox implements ImageLightboxPlugin {
         this._nextTarget();
     }
 
-    quitImageLightbox(): void {
-        this._quitImageLightbox();
+    public quitImageLightbox(): any {
+        return this._quitImageLightbox;
     }
 
     startImageLightbox(element: JQuery): void {
@@ -454,12 +460,12 @@ export class ImageLightbox implements ImageLightboxPlugin {
 
     _loadImage(direction: number): void {
         const self = this;
+        const imgTest = this.image;
 
         if (this.inProgress) {
             return;
         }
-
-        if (this.image.length) {
+        if (imgTest != null && imgTest.length > 0) {
             const params = {'opacity': 0, 'left': ''};
             if (hasCssTransitionSupport) {
                 cssTransitionTranslateX(this.image, (100 * direction) - this.swipeDiff + 'px', self.options.animationSpeed / 1000);
@@ -623,6 +629,7 @@ export class ImageLightbox implements ImageLightboxPlugin {
     }
 
     _openImageLightbox($target: JQuery, noHistory = false): void {
+        const self = this;
         if (this.inProgress) {
             return;
         }
@@ -633,7 +640,8 @@ export class ImageLightbox implements ImageLightboxPlugin {
             this._pushToHistory();
         }
         this._onStart();
-        $components.$body.append($components.$wrapper)
+        console.log(self.$body);
+        self.$body.append($components.$wrapper)
             .addClass('imagelightbox-open');
         $components.$wrapper.trigger('start.ilb2', $target);
         this._loadImage(0);
@@ -646,7 +654,7 @@ export class ImageLightbox implements ImageLightboxPlugin {
             this._pushQuitToHistory();
         }
         $components.$wrapper.trigger('quit.ilb2');
-        $components.$body.removeClass('imagelightbox-open');
+        self.$body.removeClass('imagelightbox-open');
         if (!this.image.length) {
             return;
         }
@@ -658,7 +666,6 @@ export class ImageLightbox implements ImageLightboxPlugin {
     }
 
     _addTargets(newTargets: JQuery): void {
-        console.log(newTargets);
         const self = this;
         newTargets.each(function (): void {
             self.targets = newTargets.add($(this));
@@ -666,11 +673,14 @@ export class ImageLightbox implements ImageLightboxPlugin {
 
         newTargets.on('click.ilb7', {set: self.targetSet}, function (e): void {
             e.preventDefault();
+            console.log("OMFG CLICKED");
             self.targetSet = $(e.currentTarget).data('imagelightbox');
             filterTargets();
             if (self.targets.length < 1) {
                 self._quitImageLightbox();
             } else {
+                console.log("open sesame");
+                console.log($(this));
                 self._openImageLightbox($(this));
             }
         });

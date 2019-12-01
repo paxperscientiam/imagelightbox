@@ -9,14 +9,15 @@
     <body>
         <h1>ILB</h1>
         <ul class="demo_activity">
-            <li><a href="https://spaceholder.cc/800x600" data-imagelightbox="a"><img src="https://spaceholder.cc/500x300"></a></li>
+            <li><a href="https://spaceholder.cc/500x300" data-imagelightbox="a"><img src="https://spaceholder.cc/500x300"></a></li>
             <li><a href="https://spaceholder.cc/500x300" data-imagelightbox="a"><img src="https://spaceholder.cc/500x300"></a></li>
         </ul>
 
         <script type="text/javascript" defer>
             $(document).ready(function() {
                 $("[data-imagelightbox]").imageLightbox({
-                    activity: true
+                    activity: true,
+                    overlay: true,
                 });
             });
         </script>
